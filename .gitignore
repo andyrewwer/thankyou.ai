@@ -31,3 +31,6 @@ yarn-error.log*
 .env.production.local
 
 next-env.d.ts
+
+# intelliJ
+.idea/
