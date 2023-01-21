@@ -2,9 +2,15 @@ import Head from "next/head";
 import { useState } from "react";
 import styles from "./index.module.css";
 
+interface ThankYouNote {
+  data: string;
+  __html: string;
+}
+
 export default function Home() {
-  const [input, setInput] = useState("");
-  const [result, setResult] = useState({
+  const [input, setInput] = useState<string>("");
+  const [result, setResult] = useState<ThankYouNote>({
+    data: '',
     __html: ''
   });
 
@@ -24,12 +30,11 @@ export default function Home() {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      data.result = data.result.replaceAll('\n', '<br>')
-
       setResult({
-        __html: data.result
+        data: data.result,
+        __html: data.result.replaceAll('\n', '<br>')
       });
-      // setInput("");
+      setInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -40,26 +45,27 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>OpenAI Quickstart</title>
-        <link rel="icon" href="/dog.png" />
+        <title>Thank You.ai</title>
+        <link rel="icon" href="/thank-you.png" />
       </Head>
 
       <main className={styles.main}>
-        <img src="/dog.png" className={styles.icon} />
-        <h3>Name my pet</h3>
+        <img src="/thank-you.png" className={styles.icon}/>
+        <h3>Thank you note generator</h3>
         <form onSubmit={onSubmit}>
           <input
             type="text"
             name="animal"
-            placeholder="Enter an animal"
+            placeholder="Person, gift, event"
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
-          <input type="submit" value="Generate names" />
+          <input type="submit" value="Generate note" />
         </form>
         <div className={styles.result} dangerouslySetInnerHTML={result}></div>
-        <button onClick={() => {navigator.clipboard.writeText(result.__html)}}> Copy to Clipboard </button>
+        {!!result && <button onClick={() => {navigator.clipboard.writeText(result.data)}}> Copy to Clipboard </button>}
       </main>
     </div>
   );
 }
+// TODO <a href="https://www.flaticon.com/free-icons/thank-you" title="thank you icons">Thank you icons created by Freepik - Flaticon</a>

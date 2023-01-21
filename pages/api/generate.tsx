@@ -6,21 +6,12 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export default async function (req, res) {
-  if (!configuration.apiKey) {
-    res.status(500).json({
-      error: {
-        message: "OpenAI API key not configured, please follow instructions in README.md",
-      }
-    });
-    return;
-  }
-
-  const animal = req.body.animal || '';
-  if (animal.trim().length === 0) {
+export default async function (req: NextApiRequest, res: NextApiResponse) {
+  const input = req.body.input || '';
+  if (input.trim().length === 0) {
     res.status(400).json({
       error: {
-        message: "Please enter a valid animal",
+        message: "Please enter a valid input",
       }
     });
     return;
@@ -29,8 +20,10 @@ export default async function (req, res) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(animal),
+      prompt: generatePrompt(input),
       temperature: 0.6,
+      max_tokens: 100
+
     });
     res.status(200).json({ result: completion.data.choices[0].text });
   } catch(error) {
@@ -49,15 +42,22 @@ export default async function (req, res) {
   }
 }
 
-function generatePrompt(animal) {
-  const capitalizedAnimal =
-    animal[0].toUpperCase() + animal.slice(1).toLowerCase();
-  return `Suggest three names for an animal that is a superhero.
-
-Animal: Cat
-Names: Captain Sharpclaw, Agent Fluffball, The Incredible Feline
-Animal: Dog
-Names: Ruff the Protector, Wonder Canine, Sir Barks-a-Lot
-Animal: ${capitalizedAnimal}
-Names:`;
+function generatePrompt(input: string) {
+  return `I am a AI Assistant bot who helps write thank you notes after events. It's important to highlight the gift and, a potential use, with a greeting and sign-off. The total note should be no more than 60 words.
+  Your first prompt is "${input}"`;
 }
+
+// function generatePrompt(input) {
+//   return `I am a AI Assistant bot who helps write thank you notes after events. It's important to highlight the gift and, a potential use, with a greeting and sign-off. The total note should be no more than 60 words.
+//
+// Prompt: Andrew Rapp, my brother, plant, housewarming
+// Note: Dear Andrew,
+//
+// Thank you so much for the beautiful plant you gave me for my housewarming. It's already brightened up the room and I know it will bring joy for many years to come. Your thoughtfulness is greatly appreciated.
+//
+// Best,
+// [Your Name]
+//
+// Prompt: ${input}
+// Note:`;
+// }
