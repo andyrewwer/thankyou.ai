@@ -1,20 +1,17 @@
-const repo = 'change-me-to-your-repo'
+const repo = 'thankyou.ai'
 const assetPrefix = `/${repo}/`
 const basePath = `/${repo}`
 
 module.exports = {
     assetPrefix: assetPrefix,
     basePath: basePath,
-    images: {
-        loader: 'imgix',
-        path: 'the "domain" of your Imigix source',
-    },
+    // images: {
+    //     loader: 'imgix',
+    //     path: 'the "domain" of your Imigix source',
+    // },
 }
 
 const isGithubActions = process.env.GITHUB_ACTIONS || false
-
-let assetPrefix = ''
-let basePath = '/'
 
 if (isGithubActions) {
     // trim off `<owner>/`
