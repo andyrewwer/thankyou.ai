@@ -1,5 +1,5 @@
-var assetPrefix;
-var basePath;
+var assetPrefix = ''
+var basePath = '/'
 
 const isGithubActions = process.env.GITHUB_ACTIONS || false
 
@@ -13,8 +13,8 @@ if (isGithubActions) {
 module.exports = {
     assetPrefix: assetPrefix,
     basePath: basePath,
-    // images: {
-    //     loader: 'imgix',
-    //     path: 'the "domain" of your Imigix source',
-    // },
+    images: {
+        loader: 'imgix',
+        path: 'thankyou-ai.imgix.net',
+    },
 }
