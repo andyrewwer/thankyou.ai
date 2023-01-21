@@ -1,6 +1,14 @@
-const repo = 'thankyou.ai'
-const assetPrefix = `/${repo}/`
-const basePath = `/${repo}`
+var assetPrefix;
+var basePath;
+
+const isGithubActions = process.env.GITHUB_ACTIONS || false
+
+if (isGithubActions) {
+    // trim off `<owner>/`
+    const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, '')
+    assetPrefix = `/${repo}/`
+    basePath = `/${repo}`
+}
 
 module.exports = {
     assetPrefix: assetPrefix,
@@ -9,19 +17,4 @@ module.exports = {
     //     loader: 'imgix',
     //     path: 'the "domain" of your Imigix source',
     // },
-}
-
-const isGithubActions = process.env.GITHUB_ACTIONS || false
-
-if (isGithubActions) {
-    // trim off `<owner>/`
-    const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, '')
-
-    assetPrefix = `/${repo}/`
-    basePath = `/${repo}`
-}
-
-module.exports = {
-    assetPrefix: assetPrefix,
-    basePath: basePath,
 }
