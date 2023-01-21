@@ -3,8 +3,10 @@ import { useState } from "react";
 import styles from "./index.module.css";
 
 export default function Home() {
-  const [animalInput, setAnimalInput] = useState("");
-  const [result, setResult] = useState();
+  const [input, setInput] = useState("");
+  const [result, setResult] = useState({
+    __html: ''
+  });
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -14,7 +16,7 @@ export default function Home() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ animal: animalInput }),
+        body: JSON.stringify({ input: input }),
       });
 
       const data = await response.json();
@@ -22,8 +24,12 @@ export default function Home() {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
-      setResult(data.result);
-      setAnimalInput("");
+      data.result = data.result.replaceAll('\n', '<br>')
+
+      setResult({
+        __html: data.result
+      });
+      // setInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
@@ -46,12 +52,13 @@ export default function Home() {
             type="text"
             name="animal"
             placeholder="Enter an animal"
-            value={animalInput}
-            onChange={(e) => setAnimalInput(e.target.value)}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
           />
           <input type="submit" value="Generate names" />
         </form>
-        <div className={styles.result}>{result}</div>
+        <div className={styles.result} dangerouslySetInnerHTML={result}></div>
+        <button onClick={() => {navigator.clipboard.writeText(result.__html)}}> Copy to Clipboard </button>
       </main>
     </div>
   );
