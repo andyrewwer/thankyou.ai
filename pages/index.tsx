@@ -1,6 +1,8 @@
 import Head from "next/head";
 import { useState } from "react";
 import styles from "./index.module.css";
+import Image from 'next/image'
+import thankYouImg from '../public/thank-you.png';
 
 interface ThankYouNote {
   data: string;
@@ -50,7 +52,8 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <img src="/thank-you.png" className={styles.icon}/>
+        <Image src={thankYouImg} alt={"Thank you!"} className={styles.icon} priority/>
+        {/*<img src="/thank-you.png" className={styles.icon}/>*/}
         <h3>Thank you note generator</h3>
         <form onSubmit={onSubmit}>
           <input
