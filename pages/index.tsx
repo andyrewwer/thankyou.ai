@@ -1,24 +1,27 @@
 import Head from "next/head";
-import { useState } from "react";
+import {useState} from "react";
 import styles from "./index.module.css";
-import Image from 'next/image'
-import thankYouImg from '../public/thank-you.png';
 
 interface ThankYouNote {
   data: string;
   __html: string;
 }
 
+const emptyNote: ThankYouNote = {
+  data: '',
+  __html: ''
+}
+
 export default function Home() {
   const [input, setInput] = useState<string>("");
-  const [result, setResult] = useState<ThankYouNote>({
-    data: '',
-    __html: ''
-  });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [result, setResult] = useState<ThankYouNote>(emptyNote);
 
   async function onSubmit(event) {
     event.preventDefault();
     try {
+      setLoading(true);
+      setResult(emptyNote);
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -34,13 +37,15 @@ export default function Home() {
 
       setResult({
         data: data.result,
-        __html: data.result.replaceAll('\n', '<br>')
+        __html: data.result.trim().replaceAll('\n', '<br><br>')
       });
       setInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
       alert(error.message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -52,8 +57,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <Image src={thankYouImg} alt={"Thank you!"} className={styles.icon} priority/>
-        {/*<img src="/thank-you.png" className={styles.icon}/>*/}
+        <img src="/thank-you.png" className={styles.icon}/>
         <h3>Thank you note generator</h3>
         <form onSubmit={onSubmit}>
           <input
@@ -65,8 +69,11 @@ export default function Home() {
           />
           <input type="submit" value="Generate note" />
         </form>
-        <div className={styles.result} dangerouslySetInnerHTML={result}></div>
-        {!!result && <button onClick={() => {navigator.clipboard.writeText(result.data)}}> Copy to Clipboard </button>}
+        {!!loading && <div className={styles.loading}></div>}
+        {!!result.__html && <>
+          <div className={styles.result} dangerouslySetInnerHTML={result}></div>
+          <button onClick={() => {navigator.clipboard.writeText(result.data)}}> Copy to Clipboard </button>
+        </>}
       </main>
     </div>
   );
