@@ -1,8 +1,9 @@
 import Head from "next/head";
 import {useState} from "react";
 import styles from "./index.module.css";
+import EmailVisualiser from "../components/EmailVisualiser";
 
-interface ThankYouNote {
+export interface ThankYouNote {
   data: string;
   __html: string;
 }
@@ -14,6 +15,7 @@ const emptyNote: ThankYouNote = {
 
 export default function Home() {
   const [input, setInput] = useState<string>("");
+  const [prompt, setPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<ThankYouNote>(emptyNote);
 
@@ -35,10 +37,13 @@ export default function Home() {
         throw data.error || new Error(`Request failed with status ${response.status}`);
       }
 
+      const result = data.result.trim();
+
       setResult({
-        data: data.result,
-        __html: data.result.trim().replaceAll('\n', '<br><br>')
+        data: result.replaceAll('\n', '\n\n'),
+        __html: result.replaceAll('\n', '<br><br>')
       });
+      setPrompt(input);
       setInput("");
     } catch(error) {
       // Consider implementing your own error handling logic here
@@ -57,7 +62,7 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
-        <img src="/thank-you.png" className={styles.icon}/>
+        <img src="/thank-you.png" className={styles.icon} alt={"Thank You!"}/>
         <h3>Thank you note generator</h3>
         <form onSubmit={onSubmit}>
           <input
@@ -70,10 +75,7 @@ export default function Home() {
           <input type="submit" value="Generate note" />
         </form>
         {!!loading && <div className={styles.loading}></div>}
-        {!!result.__html && <>
-          <div className={styles.result} dangerouslySetInnerHTML={result}></div>
-          <button onClick={() => {navigator.clipboard.writeText(result.data)}}> Copy to Clipboard </button>
-        </>}
+        {!!result.__html && <EmailVisualiser result={result} prompt={prompt}/>}
       </main>
     </div>
   );

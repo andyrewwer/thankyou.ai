@@ -66,13 +66,6 @@
   margin-left: calc(calc(var(--content-max-width) - 20rem)/2);
   margin-bottom: 2rem;
 }
-.main .result {
-  max-width: var(--content-max-width);
-  border: 2px solid #a87c56;
-  padding: 1.5rem;
-  margin-top: 0;
-  margin-bottom: 2rem;
-}
 
 .main .loading {
   padding: 0.5rem;
