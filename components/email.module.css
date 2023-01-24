@@ -19,6 +19,9 @@
   font-style: italic;
 }
 .container input[type="text"] {
+  border: 1px solid var(--brown-6);
+  border-radius: 4px;
+  outline-color: var(--brown-8);
   width: calc(var(--content-max-width) - 9rem);
   padding: var(--size-1) var(--size-2);
   margin: 0;
