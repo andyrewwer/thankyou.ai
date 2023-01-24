@@ -21,6 +21,11 @@
     box-sizing:border-box;
 }
 :root {
-    --content-max-width: 40rem;
+    --content-max-width: min(80vw, 80rem);
+    --button-width: 12rem;
 
+}
+
+body {
+    margin: 0;
 }

@@ -40,9 +40,7 @@
 }
 
 .email {
-  --width: 10rem;
-
-  margin-top: 2rem;
+  margin-top: 0.5rem;
   padding: 0.2rem 0;
   color: #fff;
   background-color: var(--brown-8);
@@ -50,11 +48,12 @@
   border-radius: 4px;
   text-align: center;
   cursor: pointer;
-  width: var(--width);
+  width: var(--button-width);
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.2rem;
+  margin-bottom: 2rem;
 }
 
 .email img {
