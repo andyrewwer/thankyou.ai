@@ -70,6 +70,7 @@ export default function Home() {
             name="animal"
             placeholder="Person, gift, event"
             value={input}
+            className={styles.input}
             onChange={(e) => setInput(e.target.value)}
           />
           <input type="submit" disabled={!input} value="Generate note" />
