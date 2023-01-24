@@ -72,7 +72,7 @@ export default function Home() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
           />
-          <input type="submit" value="Generate note" />
+          <input type="submit" disabled={!input} value="Generate note" />
         </form>
         {!!loading && <div className={styles.loading}></div>}
         {!!result.__html && <EmailVisualiser result={result} prompt={prompt}/>}

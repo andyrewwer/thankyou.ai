@@ -11,13 +11,19 @@ export default function EmailVisualiser(props) {
 
 
     const email = (result: ThankYouNote) => {
-        location.href=`mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(props.result.data)}`
+        location.href=`mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(result.data)}`
     }
 
     return <div className={styles.container}>
         <div className={styles.prompt}><label>Prompt</label> {props.prompt}</div>
-        <div className={styles.subject}><label>To</label> {to}</div>
-        <div className={styles.subject}><label>Subject</label> {subject}</div>
+        <div className={styles.subject}><label>To</label>
+            <input type="text" placeholder="andrew.weeks@me.com"
+                   value={to} onChange={(e) => setTo(e.target.value)}/>
+        </div>
+        <div className={styles.subject}><label>Subject</label>
+            <input type="text" placeholder="Thank you!"
+                   value={subject} onChange={(e) => setSubject(e.target.value)}/>
+        </div>
         <div className={styles.body} dangerouslySetInnerHTML={body}></div>
         <button className={styles.email} onClick={() => email(props.result)}>
             Email
