@@ -24,34 +24,22 @@
   outline-color: var(--brown-8);
   padding: var(--size-1) var(--size-2);
   margin: 0;
-}
-
-.container input[type="text"] {
   width: calc(var(--content-max-width) - 9rem);
 }
 
 .container textarea {
-  width: calc(var(--content-max-width) - 4rem);
-  height: 12rem;
-  padding: 1rem
+  height: 14rem;
+  padding: 0.75rem;
 }
 
-.subject, .prompt {
+.emailField, .prompt {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
   font-style: normal;
+  display: flex;
 }
 
-.body {
-  padding-top: var(--size-5);
-  padding-bottom: var(--size-5);
-}
-.body label {
-  display: block;
-  margin-top: -15px;
-}
-
-.email {
+.emailBtn {
   margin-top: 0.5rem;
   padding: 0.2rem 0;
   color: #fff;
@@ -68,7 +56,7 @@
   margin-bottom: 2rem;
 }
 
-.email img {
+.emailBtn img {
   transform: translateX(0.75rem);
   width: 2.5rem;
   height: 2.5rem;

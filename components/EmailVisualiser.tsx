@@ -12,19 +12,19 @@ export default function EmailVisualiser(props) {
 
     return <div className={styles.container}>
         <div className={styles.prompt}><label>Prompt</label> {props.prompt}</div>
-        <div className={styles.subject}><label>To</label>
-            <input type="text" placeholder="andrew.weeks@me.com"
+        <div className={styles.emailField}><label>To</label>
+            <input type="text" placeholder="andrew.weeks@me.com, another-email@gmail.com"
                    value={to} onChange={(e) => setTo(e.target.value)}/>
         </div>
-        <div className={styles.subject}><label>Subject</label>
+        <div className={styles.emailField}><label>Subject</label>
             <input type="text" placeholder="Thank you!"
                    value={subject} onChange={(e) => setSubject(e.target.value)}/>
         </div>
-        <div className={styles.body}>
+        <div className={styles.emailField}>
             <label>Body</label>
             <textarea value={body} onChange={(e) => setBody(e.target.value)}/>
         </div>
-        <button className={styles.email} onClick={email}>
+        <button className={styles.emailBtn} onClick={email}>
             Email
             <img src="/thank-you-white.png" alt={"Thank You!"}/>
         </button>
