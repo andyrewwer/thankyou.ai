@@ -15,16 +15,25 @@
 .container label, .prompt {
   color: var(--stone-5);
   display: inline-block;
-  width: var(--size-10);
+  width: 5rem;
   font-style: italic;
 }
-.container input[type="text"] {
+.container input[type="text"], .container textarea {
   border: 1px solid var(--brown-6);
   border-radius: 4px;
   outline-color: var(--brown-8);
-  width: calc(var(--content-max-width) - 9rem);
   padding: var(--size-1) var(--size-2);
   margin: 0;
+}
+
+.container input[type="text"] {
+  width: calc(var(--content-max-width) - 9rem);
+}
+
+.container textarea {
+  width: calc(var(--content-max-width) - 4rem);
+  height: 12rem;
+  padding: 1rem
 }
 
 .subject, .prompt {

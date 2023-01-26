@@ -3,27 +3,17 @@ import {useState} from "react";
 import styles from "./index.module.css";
 import EmailVisualiser from "../components/EmailVisualiser";
 
-export interface ThankYouNote {
-  data: string;
-  __html: string;
-}
-
-const emptyNote: ThankYouNote = {
-  data: '',
-  __html: ''
-}
-
 export default function Home() {
   const [input, setInput] = useState<string>("");
   const [prompt, setPrompt] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [result, setResult] = useState<ThankYouNote>(emptyNote);
+  const [result, setResult] = useState<string>("");
 
   async function onSubmit(event) {
     event.preventDefault();
     try {
       setLoading(true);
-      setResult(emptyNote);
+      setResult("");
       const response = await fetch("/api/generate", {
         method: "POST",
         headers: {
@@ -38,11 +28,7 @@ export default function Home() {
       }
 
       const result = data.result.trim();
-
-      setResult({
-        data: result.replaceAll('\n', '\n\n'),
-        __html: result.replaceAll('\n', '<br><br>')
-      });
+      setResult(result.replaceAll('\n', '\n\n'));
       setPrompt(input);
       setInput("");
     } catch(error) {
@@ -76,7 +62,7 @@ export default function Home() {
           <input type="submit" disabled={!input} value="Generate note" />
         </form>
         {!!loading && <div className={styles.loading}></div>}
-        {!!result.__html && <EmailVisualiser result={result} prompt={prompt}/>}
+        {!!result && <EmailVisualiser body={result} prompt={prompt}/>}
       </main>
     </div>
   );
