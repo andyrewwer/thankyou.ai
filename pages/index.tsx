@@ -2,6 +2,8 @@ import Head from "next/head";
 import {useState} from "react";
 import styles from "./index.module.css";
 import EmailVisualiser from "../components/EmailVisualiser";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function Home() {
   const [input, setInput] = useState<string>("");
@@ -47,9 +49,8 @@ export default function Home() {
         <link rel="icon" href="/thank-you.png" />
       </Head>
 
+        <Header/>
       <main className={styles.main}>
-        <img src="/thank-you.png" className={styles.icon} alt={"Thank You!"}/>
-        <h3>Thank you note generator</h3>
         <form onSubmit={onSubmit}>
           <input
             type="text"
@@ -64,7 +65,8 @@ export default function Home() {
         {!!loading && <div className={styles.loading}></div>}
         {!!result && <EmailVisualiser body={result} prompt={prompt}/>}
       </main>
+      <Footer/>
     </div>
   );
 }
-// TODO <a href="https://www.flaticon.com/free-icons/thank-you" title="thank you icons">Thank you icons created by Freepik - Flaticon</a>
+

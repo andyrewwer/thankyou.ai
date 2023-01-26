@@ -1,0 +1,14 @@
+.container {
+  margin-top: 1rem;
+  padding: 1rem;
+  width: 100%;
+  background: var(--gray-2);
+
+}
+
+.container a {
+  text-decoration-color: var(--gray-4);
+  color: var(--gray-5);
+  font-style: italic;
+  font-size: 0.75rem;
+}

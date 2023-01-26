@@ -1,0 +1,21 @@
+.container {
+  padding: 0.5rem 0;
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1rem;
+  align-items: center;
+  justify-content: center;
+  background: var(--gray-2);
+}
+
+.icon {
+  width: 3rem;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--brown-9);
+  margin: 0;
+  padding: 0;
+}
