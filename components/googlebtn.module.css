@@ -1,0 +1,38 @@
+.googleButton {
+  height: 40px;
+  margin: 10px 0;
+  gap: 1rem;
+  font-weight: 500;
+  font-size: 1rem;
+  background: #1a73e8;
+  border: none;
+  border-radius: 20px;
+  color: #fff;
+  cursor: pointer;
+  padding: 0 1rem;
+  transition: background-color .218s,border-color .218s;
+}
+
+.googleButton:hover {
+  background: #6893E7;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 10px;
+}
+.logoContainer {
+  background: #fff;
+  padding: 0.5rem 0.5rem;
+  border-radius: 100%;
+  margin: 0 0 0 -14px;
+}
+
+.logo {
+  margin: 0;
+  padding: 0;
+  height: 18px;
+  width: 18px;
+}
