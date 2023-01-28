@@ -4,6 +4,7 @@ import styles from "./index.module.css";
 import EmailVisualiser from "../components/EmailVisualiser";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import {GoogleLogin, GoogleOAuthProvider} from '@react-oauth/google';
 
 export default function Home() {
   const [input, setInput] = useState<string>("");
@@ -44,13 +45,24 @@ export default function Home() {
 
   return (
     <div>
+      <GoogleOAuthProvider clientId="1087397770403-hbosj4rl65mc0pdq2f585e9r5bp3s47v.apps.googleusercontent.com">
       <Head>
         <title>Thank You.ai</title>
         <link rel="icon" href="/thank-you.png" />
       </Head>
 
-        <Header/>
+      <Header/>
       <main className={styles.main}>
+        <GoogleLogin
+            onSuccess={credentialResponse => {
+              console.log(credentialResponse);
+            }}
+            onError={() => {
+              console.log('Login Failed');
+            }}
+            theme="filled_blue"
+            shape="pill"
+        />
         <form onSubmit={onSubmit}>
           <input
             type="text"
@@ -66,6 +78,7 @@ export default function Home() {
         {!!result && <EmailVisualiser body={result} prompt={prompt}/>}
       </main>
       <Footer/>
+      </GoogleOAuthProvider>
     </div>
   );
 }
