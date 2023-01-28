@@ -1,7 +1,6 @@
 import styles from "./googlebtn.module.css";
 
 export default function GoogleButton(props) {
-    // console.log(props.onClick())
     return <button className={styles.googleButton} onClick={props.onClick}>
         <div className={styles.container}>
             <div className={styles.logoContainer}>

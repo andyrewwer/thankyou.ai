@@ -55,7 +55,7 @@ export default function NoteGenerator() {
 
   return (
       <main className={styles.main}>
-        <GoogleButton onClick={() => login()}/>
+        <GoogleButton onClick={login}/>
         <form onSubmit={onSubmit}>
           <input
             type="text"
