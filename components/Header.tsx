@@ -1,8 +1,15 @@
 import styles from "./header.module.css";
+import {useRouter} from 'next/router';
 
 export default function Header() {
-    return <div className={styles.container}>
-        <h3 className={styles.title}>Thank you note generator</h3>
-        <img src="/thank-you.png" className={styles.icon} alt={"Thank You!"}/>
-    </div>
+    const path = useRouter().asPath;
+
+    return <ul className={styles.container}>
+            <li><div className={styles.flex}>
+                <img src="/thank-you.png" className={styles.icon} alt={"Thank You!"}/>
+                <div className={styles.title}>Thank You Assistant</div>
+            </div></li>
+            <li className={path === "/" ? styles.active : ''}><a href="/">Home</a></li>
+            <li className={path === "/generate-note" ? styles.active : ''}><a href="/generate-note">Note Generator</a></li>
+        </ul>
 }

@@ -1,8 +1,8 @@
 import {useState} from "react";
-import styles from "./index.module.css";
-import EmailVisualiser from "../components/EmailVisualiser";
-import {GoogleLogin, useGoogleLogin} from '@react-oauth/google';
-import GoogleButton from "../components/GoogleButton";
+import styles from "./generate-note.module.css";
+import EmailVisualiser from "../../components/EmailVisualiser";
+import {useGoogleLogin} from '@react-oauth/google';
+import GoogleButton from "../../components/GoogleButton";
 import axios from "axios";
 
 export default function NoteGenerator() {
