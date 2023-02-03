@@ -39,3 +39,19 @@ This is an example pet name generator app used in the OpenAI API [quickstart tut
    ```
 
 You should now be able to access the app at [http://localhost:3000](http://localhost:3000)! For the full context behind this example app, check out the [tutorial](https://beta.openai.com/docs/quickstart).
+
+
+# DB Migrations
+Need to be run manually
+
+## Thank_You_Lists
+
+```postgresql
+CREATE TABLE "thank_you_list" (
+   "id"             VARCHAR NOT NULL,
+   "share_link"      VARCHAR NOT NULL,
+   "list_name"       VARCHAR NOT NULL,
+   "list"           jsonb NOT NULL,
+   PRIMARY KEY ("id")
+);
+```

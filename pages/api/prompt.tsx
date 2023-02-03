@@ -20,7 +20,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: generatePrompt(input),
+      prompt: prompt(input),
       temperature: 0.6,
       max_tokens: 100
 
@@ -42,22 +42,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-function generatePrompt(input: string) {
+function prompt(input: string) {
   return `I am a AI Assistant bot who helps write thank you notes after events. It's important to highlight the gift and, a potential use, with a greeting and sign-off. The total note should be no more than 60 words.
   Your first prompt is "${input}"`;
 }
-
-// function generatePrompt(input) {
-//   return `I am a AI Assistant bot who helps write thank you notes after events. It's important to highlight the gift and, a potential use, with a greeting and sign-off. The total note should be no more than 60 words.
-//
-// Prompt: Andrew Rapp, my brother, plant, housewarming
-// Note: Dear Andrew,
-//
-// Thank you so much for the beautiful plant you gave me for my housewarming. It's already brightened up the room and I know it will bring joy for many years to come. Your thoughtfulness is greatly appreciated.
-//
-// Best,
-// [Your Name]
-//
-// Prompt: ${input}
-// Note:`;
-// }

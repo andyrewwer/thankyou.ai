@@ -16,7 +16,7 @@ export default function NoteGenerator() {
     try {
       setLoading(true);
       setResult("");
-      const response = await fetch("/api/generate", {
+      const response = await fetch("/api/prompt", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
