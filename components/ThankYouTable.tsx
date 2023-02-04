@@ -4,6 +4,7 @@ import {ThankYouList, ThankYouRow} from "../common/thankYou";
 import {useEffect, useState} from "react";
 import {useRouter} from 'next/router'
 import toast from 'react-hot-toast';
+import {saveListToLocalStorage} from "../common/SessionService";
 
 type table = {
     notes: ThankYouRow[],
@@ -81,6 +82,7 @@ export default function ThankYouTable(props) {
         const data: ThankYouList = await response.json();
         if (!shareLink || shareLink !== data.shareLink) {
             console.log('navigating')
+            saveListToLocalStorage(data.shareLink)
             await router.push(`/lists/${data.shareLink}`);
         }
         toast.success('List Saved')
