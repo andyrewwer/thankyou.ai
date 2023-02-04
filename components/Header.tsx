@@ -9,7 +9,7 @@ export default function Header() {
                 <img src="/thank-you.png" className={styles.icon} alt={"Thank You!"}/>
                 <div className={styles.title}>Thank You Assistant</div>
             </div></li>
-            <li className={path === "/" ? styles.active : ''}><a href="/">Home</a></li>
+            <li className={path === "/lists" ? styles.active : ''}><a href="/lists">Home</a></li>
             <li className={path === "/generate-note" ? styles.active : ''}><a href="/generate-note">Note Generator</a></li>
         </ul>
 }
