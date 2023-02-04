@@ -10,7 +10,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     switch (method) {
         case 'GET':
             const list = await ListService.findByShareLink(shareLink);
-            res.status(200).json(list)
+            if (!! list) {
+                res.status(200).json(list)
+            } else {
+                res.status(404).end()
+            }
             break
         case 'POST':
             record = await ListService.save(req.body);

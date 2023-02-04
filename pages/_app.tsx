@@ -1,5 +1,6 @@
 import './styles.css'
 import {GoogleOAuthProvider} from "@react-oauth/google";
+import { Toaster } from 'react-hot-toast';
 import Head from "next/head";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -14,5 +15,6 @@ export default function MyApp({Component, pageProps}) {
         <Header/>
         <Component {...pageProps} />
         <Footer/>
+        <Toaster gutter={3} position="top-center" reverseOrder={false}/>
     </GoogleOAuthProvider>
 }

@@ -3,6 +3,7 @@ import {Field, FieldArray, Form, Formik} from 'formik';
 import {ThankYouList, ThankYouRow} from "../util/ListService";
 import {useEffect, useState} from "react";
 import {useRouter} from 'next/router'
+import toast from 'react-hot-toast';
 
 type table = {
     notes: ThankYouRow[]
@@ -32,13 +33,27 @@ export default function ThankYouTable(props) {
                 "Content-Type": "application/json",
             }
         }).then(res => {
-            res.json().then((val: ThankYouList) => {
-                let list = val.list;
-                list.push(createEmptyThankYouRow(), createEmptyThankYouRow())
-                setInitialValues({notes: list});
-            })
+            switch (res.status) {
+                case 200:
+                    res.json().then((val: ThankYouList) => {
+                        let list = val.list;
+                        list.push(createEmptyThankYouRow(), createEmptyThankYouRow())
+                        setInitialValues({notes: list});
+                        // toast.success(`Loaded ${val.listName}`)
+                    }).catch(e => {
+                        toast.error('Failed to fetch list')
+                        console.log('inner error')
+                    });
+                    break;
+                case 404:
+                    toast.error('List not found at this URL')
+                    break;
+                default:
+                    toast.error('Something went wrong')
+            }
         }).catch(e => {
             console.log('error', e);
+            toast.error('Something went wrong 🙁')
         });
     }, [shareLink, setInitialValues])
 
@@ -60,7 +75,7 @@ export default function ThankYouTable(props) {
             console.log('navigating')
             await router.push(`/lists/${data.shareLink}`);
         }
-        // setShareLink(data.shareLink);
+        toast.success('List Saved')
     }
 
     return <div className={styles.container}>
