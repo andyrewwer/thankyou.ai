@@ -38,7 +38,7 @@ export const ListService = {
     },
 
     findByShareLink: async function (shareLink: string): Promise<ThankYouRecord> {
-        return await Database.findByField(LIST_TABLE_NAME, 'shareLink', shareLink)
+        return (await Database.findByField(LIST_TABLE_NAME, 'shareLink', shareLink))[0]
     },
 
     update: async function (body: ThankYouList) {
