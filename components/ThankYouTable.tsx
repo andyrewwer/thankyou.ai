@@ -6,7 +6,9 @@ import {useRouter} from 'next/router'
 import toast from 'react-hot-toast';
 
 type table = {
-    notes: ThankYouRow[]
+    notes: ThankYouRow[],
+    listName: string
+
 }
 
 export const createEmptyThankYouRow = (): ThankYouRow => {
@@ -19,7 +21,10 @@ export const createEmptyThankYouRow = (): ThankYouRow => {
 };
 
 export default function ThankYouTable(props) {
-    const [initialValues, setInitialValues] = useState<table>({notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]});
+    const [initialValues, setInitialValues] = useState<table>({
+        listName: 'Thank You List #001',
+        notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
+    });
     const {shareLink} = props;
     const router = useRouter();
 
@@ -38,11 +43,14 @@ export default function ThankYouTable(props) {
                     res.json().then((val: ThankYouList) => {
                         let list = val.list;
                         list.push(createEmptyThankYouRow(), createEmptyThankYouRow())
-                        setInitialValues({notes: list});
-                        // toast.success(`Loaded ${val.listName}`)
+                        setInitialValues({
+                            notes: list,
+                            listName: val.listName
+                        });
+                        toast.success(`Loaded list '${val.listName}'`)
                     }).catch(e => {
                         toast.error('Failed to fetch list')
-                        console.log('inner error')
+                        console.log('inner error', e)
                     });
                     break;
                 case 404:
@@ -71,7 +79,7 @@ export default function ThankYouTable(props) {
             body: JSON.stringify(body),
         })
         const data: ThankYouList = await response.json();
-        if (!shareLink) {
+        if (!shareLink || shareLink !== data.shareLink) {
             console.log('navigating')
             await router.push(`/lists/${data.shareLink}`);
         }
@@ -79,13 +87,14 @@ export default function ThankYouTable(props) {
     }
 
     return <div className={styles.container}>
-        <h3>Event Name</h3>
-        <button>Share</button>
         <Formik key="notes" enableReinitialize={true}
                 initialValues={initialValues}
                 onSubmit={save}>
             {(props) =>
                 <Form>
+                <Field name="listName" placeholder="Tracey & Andrew Baby Shower" />
+                <button type="button">Share</button>
+
                     <table className={styles.table}>
                         <thead>
                         <tr>
