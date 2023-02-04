@@ -1,6 +1,6 @@
 import styles from "./table.module.css";
 import {Field, FieldArray, Form, Formik} from 'formik';
-import {ThankYouList, ThankYouRow} from "../util/ListService";
+import {ThankYouList, ThankYouRow} from "../common/thankYou";
 import {useEffect, useState} from "react";
 import {useRouter} from 'next/router'
 import toast from 'react-hot-toast';

@@ -1,21 +1,9 @@
 import Database from './Database';
 import {v4 as uuidv4} from 'uuid';
+import {ThankYouList} from "../../../common/thankYou";
 // const EncryptionService = require('./EncryptionService');
 
 const LIST_TABLE_NAME = process.env.LIST_TABLE_NAME;
-
-export type ThankYouRow = {
-    name: string,
-    gift: string,
-    comment: string,
-    thankYouWritten: boolean
-}
-
-export type ThankYouList = {
-    shareLink?: string,
-    listName: string,
-    list: ThankYouRow[]
-}
 
 export type ThankYouRecord = {
     id: string,
@@ -43,6 +31,9 @@ export const ListService = {
 
     update: async function (body: ThankYouList) {
         const current = await ListService.findByShareLink(body.shareLink);
+        if (!current) {
+            return ListService.save(body);
+        }
         const record: ThankYouRecord = {
             id: current.id,
             shareLink: current.shareLink,

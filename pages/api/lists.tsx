@@ -1,4 +1,4 @@
-import {ListService} from "../../util/ListService";
+import {ListService} from "./util/ListService";
 import type {NextApiRequest, NextApiResponse} from 'next'
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
