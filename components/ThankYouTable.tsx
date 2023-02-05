@@ -88,6 +88,11 @@ export default function ThankYouTable(props) {
         toast.success('List Saved')
     }
 
+    const share = async () => {
+        await navigator.clipboard.writeText(`${window.location.href}`);
+        toast.success("Link copied to your clipboard")
+    }
+
     return <div className={styles.container}>
         <Formik key="notes" enableReinitialize={true}
                 initialValues={initialValues}
@@ -95,7 +100,7 @@ export default function ThankYouTable(props) {
             {(props) =>
                 <Form>
                 <Field name="listName" placeholder="Tracey & Andrew Baby Shower" />
-                <button type="button">Share</button>
+                <button type="button" onClick={share}>Share</button>
 
                     <table className={styles.table}>
                         <thead>
