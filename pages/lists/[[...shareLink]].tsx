@@ -1,5 +1,5 @@
 import ThankYouTable from "../../components/ThankYouTable";
-import { useRouter } from 'next/router'
+import {useRouter} from 'next/router'
 import {getSavedListFromLocalStorage} from "../../common/SessionService";
 import {useEffect, useState} from "react";
 
@@ -14,10 +14,16 @@ export default function ThankYouTableContainer() {
         let _shareLink = router.query.shareLink || [];
         _shareLink = _shareLink[0];
 
-        if (!_shareLink) {
-            _shareLink = getSavedListFromLocalStorage()
+        if (!!_shareLink) {
+            setShareLink(_shareLink)
+            return;
         }
-        setShareLink(_shareLink)
+        const localStorageLink = getSavedListFromLocalStorage()
+        if (!localStorageLink) {
+            return
+        }
+        console.log('navigating')
+        router.push(`/lists/${localStorageLink}`).then(() => {});
     }, [router, getSavedListFromLocalStorage])
 
     return (
