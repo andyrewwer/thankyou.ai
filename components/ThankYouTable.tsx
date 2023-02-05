@@ -4,7 +4,7 @@ import {ThankYouList, ThankYouRow} from "../common/thankYou";
 import {useEffect, useState} from "react";
 import {useRouter} from 'next/router'
 import toast from 'react-hot-toast';
-import {saveListToLocalStorage} from "../common/SessionService";
+import {removeListFromLocalStorage, saveListToLocalStorage} from "../common/SessionService";
 
 type table = {
     notes: ThankYouRow[],
@@ -89,8 +89,17 @@ export default function ThankYouTable(props) {
     }
 
     const share = async () => {
+        if (!shareLink) {
+            return toast.error("No saved list");
+        }
         await navigator.clipboard.writeText(`${window.location.href}`);
         toast.success("Link copied to your clipboard")
+    }
+
+    const createNew = async () => {
+        removeListFromLocalStorage();
+        await router.push("/lists");
+        toast.success("Created new List. Make sure to press 'save'.")
     }
 
     return <div className={styles.container}>
@@ -101,6 +110,7 @@ export default function ThankYouTable(props) {
                 <Form>
                 <Field name="listName" placeholder="Tracey & Andrew Baby Shower" />
                 <button type="button" onClick={share}>Share</button>
+                <button type="button" onClick={createNew}>Create new list</button>
 
                     <table className={styles.table}>
                         <thead>
