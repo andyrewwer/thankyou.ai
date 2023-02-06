@@ -44,7 +44,7 @@ export default function ThankYouTable(props) {
     });
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [input, setInput] = useState({msg: '', index: 0});
-    const {shareLink} = props;
+    const [shareLink, setShareLink] = useState(props.shareLink);
     const router = useRouter();
 
     useEffect(() => {
@@ -115,7 +115,8 @@ export default function ThankYouTable(props) {
     }
 
     const createNew = async () => {
-        removeListFromLocalStorage();
+        await removeListFromLocalStorage();
+        setShareLink('');
         await router.push("/lists");
         toast.success("Created new List. Make sure to press 'save'.")
     }
