@@ -6,7 +6,7 @@ import {
     saveListToLocalStorage
 } from "../../common/SessionService";
 import {useEffect, useState} from "react";
-import {ThankYouList, ThankYouTable} from "../../common/thankYou";
+import {ThankYouList, ThankYouRow, ThankYouTable} from "../../common/thankYou";
 import toast from "react-hot-toast";
 import styles from "../../components/table.module.css";
 import {Field, Form, Formik} from "formik";
@@ -26,7 +26,7 @@ export default function ThankYouTableContainer() {
         let _shareLink = router.query.shareLink || [];
         _shareLink = _shareLink[0];
 
-        if (!shareLink) {
+        if (!_shareLink) {
             const localStorageLink = getSavedListFromLocalStorage()
             if (!localStorageLink) {
                 return
@@ -71,11 +71,11 @@ export default function ThankYouTableContainer() {
     }, [router, getSavedListFromLocalStorage])
 
     const save = async (_values) => {
+        const _list = _values.notes.filter((item: ThankYouRow) => !!item.thankYouWritten || !!item.name || !!item.gift || !!item.comment);
         const body: ThankYouList = {
             shareLink: shareLink,
             listName: _values.listName,
-            //TODO better parsing of this to ignore empty rows
-            list: _values.notes.slice(0, -2)
+            list: _list
         }
         const response = await fetch("/api/lists", {
             method: !!shareLink ? "PATCH" : "POST",
