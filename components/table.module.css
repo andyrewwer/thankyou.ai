@@ -42,13 +42,35 @@
   width: 100%;
 }
 
-table .lessPadding {
+table .lastColumn {
   --size: 0.2rem;
   padding: 0.2rem var(--size) 0;
 }
 
+.table .lastColumn div {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.table .lastColumn svg:first-of-type {
+  margin: 0 0 0 auto;
+  color: var(--gray-4);
+}
+
+.table .lastColumn svg {
+  color: var(--gray-4);
+}
+
+.table .icon, .table span {
+  margin-right: 0.5rem;
+}
 .icon {
   max-width: 40px;
+}
+
+.table .lastColumn svg.activeIcon {
+  color: var(--gray-9);
 }
 
 .generateBtn {

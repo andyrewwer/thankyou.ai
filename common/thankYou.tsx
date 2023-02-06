@@ -10,3 +10,8 @@ export type ThankYouList = {
     listName: string,
     list: ThankYouRow[]
 }
+
+export type ThankYouTable = {
+    notes: ThankYouRow[],
+    listName: string
+}

@@ -1,6 +1,5 @@
 import styles from "./header.module.css";
 import {useRouter} from 'next/router';
-
 export default function Header() {
     const path = useRouter().asPath;
 

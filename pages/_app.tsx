@@ -1,9 +1,13 @@
+import { config } from '@fortawesome/fontawesome-svg-core'
+import '@fortawesome/fontawesome-svg-core/styles.css'
 import './styles.css'
 import {GoogleOAuthProvider} from "@react-oauth/google";
 import { Toaster } from 'react-hot-toast';
 import Head from "next/head";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+
+config.autoAddCss = false
 
 // This default export is required to support styles.css
 export default function MyApp({Component, pageProps}) {
