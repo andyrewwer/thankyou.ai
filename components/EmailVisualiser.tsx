@@ -8,6 +8,7 @@ export default function EmailVisualiser(props) {
 
     const email = () => {
         location.href=`mailto:${to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+        props.onEmailSend(true);
     }
 
     return <div className={styles.container}>

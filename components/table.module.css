@@ -40,3 +40,21 @@
   outline-color: var(--brown-8);
   width: 100%;
 }
+
+table .lessPadding {
+  --size: 0.2rem;
+  padding: 0.2rem var(--size) 0;
+}
+
+.icon {
+  max-width: 40px;
+}
+
+.generateBtn {
+  display: flex;
+  gap: 0.3rem
+}
+
+.generateBtn .icon {
+  max-width: 20px;
+}

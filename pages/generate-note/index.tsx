@@ -1,19 +1,25 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import styles from "./generate-note.module.css";
 import EmailVisualiser from "../../components/EmailVisualiser";
-import {useGoogleLogin} from '@react-oauth/google';
-import GoogleButton from "../../components/GoogleButton";
-import axios from "axios";
 import toast from "react-hot-toast";
 
-export default function NoteGenerator() {
-  const [input, setInput] = useState<string>("");
-  const [prompt, setPrompt] = useState<string>("");
+export default function NoteGenerator(props) {
+  const [input, setInput] = useState<string>(props.input);
   const [loading, setLoading] = useState<boolean>(false);
   const [result, setResult] = useState<string>("");
 
+  useEffect(() => {
+    if (props.hideInput) {
+      handleSubmit().then().catch();
+    }
+  }, [props.hideInput])
+
   async function onSubmit(event) {
     event.preventDefault();
+    await handleSubmit();
+  }
+
+  const handleSubmit = async () => {
     try {
       setLoading(true);
       setResult("");
@@ -32,8 +38,7 @@ export default function NoteGenerator() {
 
       const result = data.result.trim();
       setResult(result.replaceAll('\n', '\n\n'));
-      setPrompt(input);
-      setInput("");
+      setResult(result.replaceAll('\n\n\n', '\n'));
       toast.success('Success! See response below')
     } catch(error) {
       // Consider implementing your own error handling logic here
@@ -59,6 +64,7 @@ export default function NoteGenerator() {
       <main className={styles.main}>
         {/*<GoogleButton onClick={login}/>*/}
         <form onSubmit={onSubmit}>
+          {!props.hideInput && <>
           <input
             type="text"
             name="animal"
@@ -68,9 +74,10 @@ export default function NoteGenerator() {
             onChange={(e) => setInput(e.target.value)}
           />
           <input type="submit" disabled={!input} value="Generate note" />
+          </>}
         </form>
         {!!loading && <div className={styles.loading}></div>}
-        {!!result && <EmailVisualiser body={result} prompt={prompt}/>}
+        {!!result && <EmailVisualiser body={result} prompt={input} onEmailSend={props.onEmailSend}/>}
       </main>
   );
 }

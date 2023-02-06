@@ -5,6 +5,19 @@ import {useEffect, useState} from "react";
 import {useRouter} from 'next/router'
 import toast from 'react-hot-toast';
 import {removeListFromLocalStorage, saveListToLocalStorage} from "../common/SessionService";
+import Modal from 'react-modal';
+import NoteGenerator from "../pages/generate-note";
+
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)',
+    },
+};
 
 type table = {
     notes: ThankYouRow[],
@@ -26,6 +39,8 @@ export default function ThankYouTable(props) {
         listName: 'Thank You List #001',
         notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
     });
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [input, setInput] = useState({msg: '', index: 0});
     const {shareLink} = props;
     const router = useRouter();
 
@@ -69,7 +84,7 @@ export default function ThankYouTable(props) {
     const save = async (values) => {
         const body: ThankYouList = {
             shareLink: shareLink,
-            listName: 'Christmas 2022', //TODO make dynamic
+            listName: values.listName,
             list: values.notes.slice(0, -2)
         }
         const response = await fetch("/api/lists", {
@@ -102,6 +117,17 @@ export default function ThankYouTable(props) {
         toast.success("Created new List. Make sure to press 'save'.")
     }
 
+    const generate = (note: ThankYouRow, index) => {
+        setInput({msg: `${note.gift} from ${note.name}`, index: index})
+        setModalIsOpen(true);
+    }
+
+    const closeModal = (success = false) => {
+        setModalIsOpen(false);
+        //todo manually set `thankYou` to true here
+        console.log('close Modal', success)
+    }
+
     return <div className={styles.container}>
         <Formik key="notes" enableReinitialize={true}
                 initialValues={initialValues}
@@ -118,7 +144,9 @@ export default function ThankYouTable(props) {
                             <th>From</th>
                             <th>Gift</th>
                             <th>Comment</th>
-                            <th style={{width: '10px'}}></th>
+                            <th style={{textAlign: "center"}} className={styles.lessPadding}>
+                                <img src="/thank-you.png" className={styles.icon} alt={"Thank You!"}/>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -142,8 +170,12 @@ export default function ThankYouTable(props) {
                                                                    placeholder="Any comments"/>
                                                         </td>
                                                         <td>
-                                                            <Field type="checkbox"
-                                                                   name={`notes.${index}.thankYouWritten`}/>
+                                                            <div style={{display: "flex", gap: "0.5rem"}}>
+                                                                <Field type="checkbox"
+                                                                       name={`notes.${index}.thankYouWritten`}/>
+                                                                <button type="button" className={styles.generateBtn} onClick={() => generate(r, index)}>
+                                                                    Generate <img src="/thank-you.png" className={styles.icon} alt={"Thank You!"}/></button>
+                                                            </div>
                                                         </td>
                                                     </tr>))}
                                             </>
@@ -158,6 +190,15 @@ export default function ThankYouTable(props) {
                     </div>
                 </Form>}
         </Formik>
+        <Modal
+            isOpen={modalIsOpen}
+            onRequestClose={closeModal}
+            style={customStyles}
+            contentLabel="Example Modal"
+        >
+            <NoteGenerator input={input.msg} hideInput={true} onEmailSend={closeModal}/>
+        </Modal>
+
     </div>
 }
 
