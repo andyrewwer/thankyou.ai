@@ -158,7 +158,7 @@ export default function ThankYouTable(props) {
                                         return (
                                             <>
                                                 {props.values.notes.length > 0 && props.values.notes.map((r, index) => (
-                                                    <tr key={index}>
+                                                    <tr key={index} className={r.thankYouWritten ? styles.completeRow : undefined}>
                                                         <td style={{textAlign: "center"}}>
                                                             <Field type="text" name={`notes.${index}.name`}
                                                                    placeholder="John Doe"

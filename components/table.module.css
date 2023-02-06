@@ -1,3 +1,4 @@
+
 .container {
   display: flex;
   align-items: center;
@@ -57,4 +58,8 @@ table .lessPadding {
 
 .generateBtn .icon {
   max-width: 20px;
+}
+
+.table tr.completeRow {
+  background-color: #85A8C5;
 }
