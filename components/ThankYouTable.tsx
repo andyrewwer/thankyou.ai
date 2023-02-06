@@ -35,6 +35,9 @@ export const createEmptyThankYouRow = (): ThankYouRow => {
 };
 
 export default function ThankYouTable(props) {
+    //For accessibility
+    Modal.setAppElement('#__next');
+
     const [initialValues, setInitialValues] = useState<table>({
         listName: 'Thank You List #001',
         notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
