@@ -36,9 +36,10 @@ export default function NoteGenerator(props) {
         toast.error(`Request failed with status ${response.status}`)
       }
 
-      const result = data.result.trim();
-      setResult(result.replaceAll('\n', '\n\n'));
-      setResult(result.replaceAll('\n\n\n', '\n'));
+      let result = data.result.trim()
+          .replaceAll('\n', '\n\n')
+          .replaceAll('\n\n\n', '\n')
+      setResult(result);
       if (!props.hideInput) {
         toast.success('Success! See response below')
       }
