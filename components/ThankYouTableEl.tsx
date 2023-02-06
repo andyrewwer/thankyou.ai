@@ -6,6 +6,7 @@ import Modal from 'react-modal';
 import NoteGenerator from "../pages/generate-note";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faArrowDownLong, faArrowUpLong} from '@fortawesome/free-solid-svg-icons'
+import toast from "react-hot-toast";
 
 const customStyles = {
     content: {
@@ -34,7 +35,7 @@ export default function ThankYouTableEl() {
     const [sortAscending, setSortAscending] = useState(true);
 
     const [modalState, setModalState] = useState({msg: '', index: 0});
-    const {values, setValues} = useFormikContext();
+    const {values, setValues, setFieldValue} = useFormikContext();
 
 
     const generate = (note: ThankYouRow, index) => {
@@ -43,16 +44,21 @@ export default function ThankYouTableEl() {
     }
 
     const closeModal = (success = false) => {
+        if (success) {
+            // @ts-ignore
+            const notes: ThankYouRow[] = values.notes;
+            notes[modalState.index].thankYouWritten = true;
+            setFieldValue('notes', notes);
+            toast.success("Marked thank-you as sent")
+        }
         setModalIsOpen(false);
-        //todo manually set `thankYou` to true here
-        console.log('close Modal', success)
     }
 
     const sort = () => {
         const multiplier = sortAscending ? 1 : -1;
         // @ts-ignore
         const temp: ThankYouTable = Object.assign(values);
-        temp.notes.sort((a,b) => {
+        temp.notes.sort((a, b) => {
             if (a.thankYouWritten) return 1 * multiplier;
             if (b.thankYouWritten) return -1 * multiplier;
             return 0;
@@ -62,66 +68,63 @@ export default function ThankYouTableEl() {
     }
 
     return <>
-    <table className={styles.table}>
-                        <thead>
-                        <tr>
-                            <th>FROM</th>
-                            <th>GIFT</th>
-                            <th>COMMENT</th>
-                            <th style={{textAlign: "center"}} className={styles.lastColumn} onClick={sort}>
-                                <div>
-                                    <span>SENT</span>
-                                    <img src="/thank-you.png" className={styles.icon} alt={"Thank You!"}/>
-                                    <FontAwesomeIcon className={sortAscending ? styles.activeIcon : undefined} icon={faArrowUpLong}/>
-                                    <FontAwesomeIcon className={!sortAscending ? styles.activeIcon : undefined} icon={faArrowDownLong}/>
-                                </div>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <FieldArray name="notes"
-                                    render={arrayHelpers => {
-                                        return (
-                                            <>
-                                                {/*@ts-ignore*/}
-                                                {values.notes.length > 0 && values.notes.map((r, index) => (
-                                                    <tr key={index}
-                                                        className={r.thankYouWritten ? styles.completeRow : undefined}>
-                                                        <td style={{textAlign: "center"}}>
-                                                            <Field type="text" name={`notes.${index}.name`}
-                                                                   placeholder="John Doe"
-                                                                   onBlur={() => addOrRemoveRowsOnBlur(arrayHelpers, index)}/>
-                                                        </td>
-                                                        <td>
-                                                            <Field type="text" name={`notes.${index}.gift`}
-                                                                   placeholder="Brief Description of the Gift"/>
-                                                        </td>
-                                                        <td>
-                                                            <Field type="text" name={`notes.${index}.comment`}
-                                                                   placeholder="Any comments"/>
-                                                        </td>
-                                                        <td>
-                                                            <div style={{display: "flex", gap: "0.5rem"}}>
-                                                                <Field type="checkbox"
-                                                                       name={`notes.${index}.thankYouWritten`}/>
-                                                                <button type="button" className={styles.generateBtn}
-                                                                        onClick={() => generate(r, index)}>
-                                                                    Generate <img src="/thank-you.png"
-                                                                                  className={styles.icon}
-                                                                                  alt={"Thank You!"}/></button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>))}
-                                            </>
-                                        )
-                                    }}/>
-                        </tbody>
-                    </table>
-                    <div className="center">
-                        <button type="submit"
-                                style={{marginTop: "10px", justifySelf: "center"}}>Save
-                        </button>
+        <table className={styles.table}>
+            <thead>
+            <tr>
+                <th>FROM</th>
+                <th>GIFT</th>
+                <th>COMMENT</th>
+                <th style={{textAlign: "center"}} className={styles.lastColumn} onClick={sort}>
+                    <div>
+                        <span>SENT</span>
+                        <img src="/thank-you.png" className={styles.icon} alt={"Thank You!"}/>
+                        <FontAwesomeIcon className={sortAscending ? styles.activeIcon : undefined}
+                                         icon={faArrowUpLong}/>
+                        <FontAwesomeIcon className={!sortAscending ? styles.activeIcon : undefined}
+                                         icon={faArrowDownLong}/>
                     </div>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <FieldArray name="notes"
+                        render={arrayHelpers => {
+                            return (
+                                <>
+                                    {/*@ts-ignore*/}
+                                    {values.notes.length > 0 && values.notes.map((r, index) => (
+                                        <tr key={index}
+                                            className={r.thankYouWritten ? styles.completeRow : undefined}>
+                                            <td style={{textAlign: "center"}}>
+                                                <Field type="text" name={`notes.${index}.name`}
+                                                       placeholder="John Doe"
+                                                       onBlur={() => addOrRemoveRowsOnBlur(arrayHelpers, index)}/>
+                                            </td>
+                                            <td>
+                                                <Field type="text" name={`notes.${index}.gift`}
+                                                       placeholder="Brief Description of the Gift"/>
+                                            </td>
+                                            <td>
+                                                <Field type="text" name={`notes.${index}.comment`}
+                                                       placeholder="Any comments"/>
+                                            </td>
+                                            <td>
+                                                <div style={{display: "flex", gap: "0.5rem"}}>
+                                                    <Field type="checkbox"
+                                                           name={`notes.${index}.thankYouWritten`}/>
+                                                    <button type="button" className={styles.generateBtn}
+                                                            onClick={() => generate(r, index)}>
+                                                        Generate <img src="/thank-you.png"
+                                                                      className={styles.icon}
+                                                                      alt={"Thank You!"}/></button>
+                                                </div>
+                                            </td>
+                                        </tr>))}
+                                </>
+                            )
+                        }}/>
+            </tbody>
+        </table>
         <Modal
             isOpen={modalIsOpen}
             onRequestClose={closeModal}

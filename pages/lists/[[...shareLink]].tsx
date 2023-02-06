@@ -119,6 +119,7 @@ export default function ThankYouTableContainer() {
                     onSubmit={save}>
                     <Form>
                         <Field name="listName" placeholder="Tracey & Andrew Baby Shower"/>
+                        <button type="submit">Save</button>
                         <button type="button" onClick={share}>Share</button>
                         <button type="button" onClick={createNew}>Create new list</button>
 

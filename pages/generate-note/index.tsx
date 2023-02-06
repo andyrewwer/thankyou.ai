@@ -39,7 +39,9 @@ export default function NoteGenerator(props) {
       const result = data.result.trim();
       setResult(result.replaceAll('\n', '\n\n'));
       setResult(result.replaceAll('\n\n\n', '\n'));
-      toast.success('Success! See response below')
+      if (!props.hideInput) {
+        toast.success('Success! See response below')
+      }
     } catch(error) {
       // Consider implementing your own error handling logic here
       console.error(error);
