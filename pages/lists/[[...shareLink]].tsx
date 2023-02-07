@@ -12,6 +12,7 @@ import styles from "./lists.module.css";
 import {Field, Form, Formik} from "formik";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faArrowsRotate, faCheckCircle, faCirclePlus, faUserPlus} from '@fortawesome/free-solid-svg-icons'
+import axios from "axios";
 
 //weird name is required, routes all /list, /list/* and /list/*/** here
 //see more: https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes
@@ -40,35 +41,27 @@ export default function ThankYouTableContainer() {
             return
         }
 
-        fetch(`/api/lists?shareLink=${_shareLink}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        }).then(async res => {
-            switch (res.status) {
-                case 200:
-                    try {
-                        const val: ThankYouList = await res.json()
-                        let list = val.list;
-                        list.push(createEmptyThankYouRow(), createEmptyThankYouRow())
-                        setInitialValues({
-                            notes: list,
-                            listName: val.listName
-                        });
-                        setShareLink(val.shareLink)
-                        toast.success(`Loaded list '${val.listName}'`)
-                    } catch (e) {
-                        toast.error('Failed to fetch list')
-                        console.log('inner error', e)
-                    }
-                    break;
-                case 404:
-                    toast.error('List not found at this URL');
-                    removeListFromLocalStorage();
-                    break;
-                default:
-                    toast.error('Something went wrong')
+        axios.get(`/api/lists?shareLink=${_shareLink}`).then(res => {
+            if (res.status === 200) {
+                try {
+                    const val: ThankYouList = res.data;
+                    let list = val.list;
+                    list.push(createEmptyThankYouRow(), createEmptyThankYouRow())
+                    setInitialValues({
+                        notes: list,
+                        listName: val.listName
+                    });
+                    setShareLink(val.shareLink)
+                    toast.success(`Loaded list '${val.listName}'`)
+                } catch (e) {
+                    toast.error('Failed to fetch list')
+                    console.log('inner error', e)
+                }
+            } else if (res.status === 404) {
+                toast.error('List not found at this URL');
+                removeListFromLocalStorage();
+            } else {
+                toast.error('Something went wrong')
             }
         }).catch(e => {
             console.log('error', e);
@@ -127,7 +120,7 @@ export default function ThankYouTableContainer() {
         }
         saveTimeoutInterval = setTimeout(() => {
             if (!saved) {
-                save(formikRef.current.values).then( )
+                save(formikRef.current.values).then()
             }
         }, 3000);
     }
