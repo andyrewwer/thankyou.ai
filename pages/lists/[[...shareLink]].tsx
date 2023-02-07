@@ -5,23 +5,26 @@ import {
     removeListFromLocalStorage,
     saveListToLocalStorage
 } from "../../common/SessionService";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {ThankYouList, ThankYouRow, ThankYouTable} from "../../common/thankYou";
 import toast from "react-hot-toast";
 import styles from "./lists.module.css";
 import {Field, Form, Formik} from "formik";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCirclePlus, faFloppyDisk, faUserPlus} from '@fortawesome/free-solid-svg-icons'
+import {faArrowsRotate, faCheckCircle, faCirclePlus, faUserPlus} from '@fortawesome/free-solid-svg-icons'
 
 //weird name is required, routes all /list, /list/* and /list/*/** here
 //see more: https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes
 export default function ThankYouTableContainer() {
-    const router = useRouter()
+    const router = useRouter();
+    const formikRef = useRef(null);
     const [shareLink, setShareLink] = useState('')
+    const [saved, setSaved] = useState(true)
     const [initialValues, setInitialValues] = useState<ThankYouTable>({
         listName: 'Thank You List #001',
         notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
     });
+    let saveTimeoutInterval;
 
     useEffect(() => {
 
@@ -74,6 +77,7 @@ export default function ThankYouTableContainer() {
     }, [router, getSavedListFromLocalStorage])
 
     const save = async (_values) => {
+        setSaved(true);
         const _list = _values.notes.filter((item: ThankYouRow) => !!item.thankYouWritten || !!item.name || !!item.gift || !!item.comment);
         const body: ThankYouList = {
             shareLink: shareLink,
@@ -115,21 +119,38 @@ export default function ThankYouTableContainer() {
         toast.success("Created new List. Make sure to press 'save'.")
     }
 
+    const formChanged = () => {
+        //TODO bug starts unsaved because form changes right at the start
+        setSaved(false);
+        if (!!saveTimeoutInterval) {
+            clearTimeout(saveTimeoutInterval);
+        }
+        saveTimeoutInterval = setTimeout(() => {
+            if (!saved) {
+                save(formikRef.current.values).then( )
+            }
+        }, 3000);
+    }
+
     return (
         <div className={styles.container}>
             <Formik key="notes" enableReinitialize={true}
                     initialValues={initialValues}
-                    onSubmit={save}>
+                    onSubmit={save}
+                    innerRef={formikRef}>
                 <Form>
                     <div className={styles.tableHeader}>
                         <Field name="listName" placeholder="Tracey & Andrew Baby Shower"/>
-                        <button type="submit">Save <FontAwesomeIcon icon={faFloppyDisk}/></button>
+                        <button type="submit">{!saved ?
+                            <><FontAwesomeIcon icon={faArrowsRotate}/> Saving ...</> :
+                            <><FontAwesomeIcon icon={faCheckCircle}/> Saved</>}
+                        </button>
                         <div className={styles.break}/>
                         <button type="button" onClick={share}>Share <FontAwesomeIcon icon={faUserPlus}/></button>
                         <button type="button" onClick={createNew}>New <FontAwesomeIcon icon={faCirclePlus}/></button>
                     </div>
                     <div>
-                        <ThankYouTableEl/>
+                        <ThankYouTableEl formChanged={formChanged}/>
                     </div>
                 </Form>
             </Formik>

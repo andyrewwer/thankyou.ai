@@ -1,7 +1,7 @@
 import styles from "./table.module.css";
 import {Field, FieldArray, useFormikContext} from 'formik';
 import {ThankYouRow, ThankYouTable} from "../common/thankYou";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Modal from 'react-modal';
 import NoteGenerator from "../pages/generate-note";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
@@ -28,7 +28,9 @@ export const createEmptyThankYouRow = (): ThankYouRow => {
     });
 };
 
-export default function ThankYouTableEl() {
+export default function ThankYouTableEl(props) {
+    const {formChanged} = props;
+
     //For accessibility
     Modal.setAppElement('#__next');
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -37,6 +39,9 @@ export default function ThankYouTableEl() {
     const [modalState, setModalState] = useState({msg: '', index: 0});
     const {values, setValues, setFieldValue} = useFormikContext();
 
+    useEffect(() => {
+        formChanged();
+    }, [values]);
 
     const generate = (note: ThankYouRow, index) => {
         setModalState({msg: `${note.gift} from ${note.name}`, index: index})
@@ -102,7 +107,8 @@ export default function ThankYouTableEl() {
                                             </td>
                                             <td>
                                                 <Field type="text" name={`notes.${index}.gift`}
-                                                       placeholder="Brief Description of the Gift"/>
+                                                       placeholder="Brief Description of the Gift"
+                                                       onBlur={() => addOrRemoveRowsOnBlur(arrayHelpers, index)}/>
                                             </td>
                                             <td>
                                                 <Field type="text" name={`notes.${index}.comment`}
@@ -156,7 +162,7 @@ const removeRowsFromBottom = (arrayHelpers, notes, index) => {
     const thirdFromLastNote = notes[notes.length - 3];
 
     if (index === notes.length - 3) {
-        if (!thirdFromLastNote.gift && !thirdFromLastNote.name) {
+        if (!thirdFromLastNote.gift && !thirdFromLastNote.name && !thirdFromLastNote.comment) {
             arrayHelpers.pop();
         }
     }
