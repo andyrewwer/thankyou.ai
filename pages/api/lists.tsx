@@ -22,7 +22,11 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
             break
         case 'PATCH':
             record = await ListService.update(req.body);
-            res.status(200).json(record);
+            res.status(200).json({
+                shareLink: record.shareLink,
+                listName: record.listName,
+                list: JSON.parse(record.list)
+            });
             break
         default:
             res.setHeader('Allow', ['GET', 'POST', 'PATCH'])

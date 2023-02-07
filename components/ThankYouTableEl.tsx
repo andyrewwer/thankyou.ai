@@ -7,6 +7,7 @@ import NoteGenerator from "../pages/generate-note";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faArrowDownLong, faArrowUpLong} from '@fortawesome/free-solid-svg-icons'
 import toast from "react-hot-toast";
+import {v4 as uuidv4} from 'uuid';
 
 const customStyles = {
     content: {
@@ -21,6 +22,7 @@ const customStyles = {
 
 export const createEmptyThankYouRow = (): ThankYouRow => {
     return ({
+        id: uuidv4(),
         name: '',
         gift: '',
         comment: '',
@@ -101,6 +103,7 @@ export default function ThankYouTableEl(props) {
                                         <tr key={index}
                                             className={r.thankYouWritten ? styles.completeRow : undefined}>
                                             <td style={{textAlign: "center"}}>
+                                                <Field type="hidden" name={`notes.${index}.id`}/>
                                                 <Field type="text" name={`notes.${index}.name`}
                                                        placeholder="John Doe"
                                                        onBlur={() => addOrRemoveRowsOnBlur(arrayHelpers, index)}/>

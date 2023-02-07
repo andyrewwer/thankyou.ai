@@ -6,7 +6,7 @@ import {
     saveListToLocalStorage
 } from "../../common/SessionService";
 import {useEffect, useRef, useState} from "react";
-import {ThankYouList, ThankYouRow, ThankYouTable} from "../../common/thankYou";
+import {ThankYouList, ThankYouRequest, ThankYouRow, ThankYouRowDto, ThankYouTable} from "../../common/thankYou";
 import toast from "react-hot-toast";
 import styles from "./lists.module.css";
 import {Field, Form, Formik} from "formik";
@@ -25,6 +25,7 @@ export default function ThankYouTableContainer() {
         listName: 'Thank You List #001',
         notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
     });
+    const [savedList, setSavedList] = useState<ThankYouRow[]>([]);
     let saveTimeoutInterval;
 
     useEffect(() => {
@@ -49,6 +50,7 @@ export default function ThankYouTableContainer() {
                 try {
                     const val: ThankYouList = res.data;
                     let list = val.list;
+                    setSavedList(list)
                     list.push(createEmptyThankYouRow(), createEmptyThankYouRow())
                     setInitialValues({
                         notes: list,
@@ -73,12 +75,54 @@ export default function ThankYouTableContainer() {
     }, [router, getSavedListFromLocalStorage])
 
     const save = async (_values) => {
-        setSaved(true);
-        const _list = _values.notes.filter((item: ThankYouRow) => !!item.thankYouWritten || !!item.name || !!item.gift || !!item.comment);
-        const body: ThankYouList = {
+        let inputFiltered = _values.notes
+            .filter((item: ThankYouRow) => !!item.thankYouWritten || !!item.name || !!item.gift || !!item.comment);
+
+        const _add: ThankYouRowDto[] = inputFiltered
+            .filter((a: ThankYouRow) => {
+                return !savedList.some((b: ThankYouRow) => a.id === b.id)})
+            .map((item: ThankYouRow): ThankYouRowDto => ({
+                id: item.id,
+                name: item.name,
+                gift: item.gift,
+                comment: item.comment,
+                thankYouWritten: item.thankYouWritten,
+                action: "ADD"
+            }));
+
+        const _edit: ThankYouRowDto[] = inputFiltered
+            //don't save if it's already saved
+            .filter((a: ThankYouRow) =>
+                savedList.some((b: ThankYouRow) => a.id === b.id &&
+                    (a.name !== b.name || a.gift !== b.gift || a.comment !== b.comment || a.thankYouWritten !== b.thankYouWritten)))
+            .map((item: ThankYouRow): ThankYouRowDto => ({
+                id: item.id,
+                name: item.name,
+                gift: item.gift,
+                comment: item.comment,
+                thankYouWritten: item.thankYouWritten,
+                action: "EDIT"
+            }));
+
+
+        const _remove: ThankYouRowDto[] = savedList
+            .filter((a: ThankYouRow) => {
+                return _values.notes.some((b: ThankYouRow) =>
+                    a.id === b.id && !b.thankYouWritten && !b.name && !b.gift && !b.comment)
+            })
+            .map((item: ThankYouRow): ThankYouRowDto => ({
+                id: item.id,
+                name: item.name,
+                gift: item.gift,
+                comment: item.comment,
+                thankYouWritten: item.thankYouWritten,
+                action: "DELETE"
+            }));
+
+        const body: ThankYouRequest = {
             shareLink: shareLink,
             listName: _values.listName,
-            list: _list
+            list: [..._add, ..._edit, ..._remove]
         }
         const response = await fetch("/api/lists", {
             method: !!shareLink ? "PATCH" : "POST",
@@ -93,7 +137,14 @@ export default function ThankYouTableContainer() {
             saveListToLocalStorage(data.shareLink)
             await router.push(`/lists/${data.shareLink}`);
         }
-        toast.success('List Saved')
+        toast.success('List Saved');
+        setSaved(true);
+        setSavedList(data.list);
+        setInitialValues({
+            listName: data.listName,
+            notes: data.list
+        });
+
     }
 
     const share = async () => {
@@ -107,6 +158,7 @@ export default function ThankYouTableContainer() {
     const createNew = async () => {
         await removeListFromLocalStorage();
         setShareLink('');
+        setSavedList([])
         setInitialValues({
             listName: 'New List',
             notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
@@ -123,7 +175,7 @@ export default function ThankYouTableContainer() {
         }
         saveTimeoutInterval = setTimeout(() => {
             if (!saved) {
-                save(formikRef.current.values).then()
+                save(formikRef.current.values).then();
             }
         }, 3000);
     }
