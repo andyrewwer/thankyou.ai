@@ -38,7 +38,9 @@
     background-color: var(--stone-2);
 }
 
-.table {
-    width: 100vw;
+@media screen and (max-width: 760px) {
+    .tableHeader {
+        overflow-x: scroll;
+        width: 760px;
+    }
 }
-

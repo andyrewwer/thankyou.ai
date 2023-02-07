@@ -76,3 +76,10 @@ table .lastColumn {
 .table tr.completeRow {
   background-color: #85A8C5;
 }
+
+@media screen and (max-width: 760px) {
+  .table {
+    overflow-x: scroll;
+    width: 760px;
+  }
+}
