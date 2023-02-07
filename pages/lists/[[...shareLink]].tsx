@@ -28,6 +28,9 @@ export default function ThankYouTableContainer() {
     let saveTimeoutInterval;
 
     useEffect(() => {
+        if (!router.isReady) {
+            return;
+        }
 
         let _shareLink = router.query.shareLink || [];
         _shareLink = _shareLink[0];
