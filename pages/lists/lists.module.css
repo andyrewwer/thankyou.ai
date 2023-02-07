@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.tableHeader {
+    display: flex;
+    gap: 0.5rem;
+    width: 100vw;
+    padding: 0.2rem 0;
+}
+
+.tableHeader input {
+    border: 1px solid var(--stone-4);
+    margin-left: 5px;
+}
+
+.break {
+    margin: auto;
+}
+
+.tableHeader button {
+    padding: 0.4rem 0.6rem;
+    background-color: transparent;
+    border: 1px solid var(--stone-4);
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 150;
+    color: var(--stone-8);
+
+}
+
+.tableHeader button svg {
+    margin-left: 0.1rem;
+}
+
+.tableHeader button:hover {
+    background-color: var(--stone-2);
+}
+
+.table {
+    width: 100vw;
+}
+

@@ -8,8 +8,10 @@ import {
 import {useEffect, useState} from "react";
 import {ThankYouList, ThankYouRow, ThankYouTable} from "../../common/thankYou";
 import toast from "react-hot-toast";
-import styles from "../../components/table.module.css";
+import styles from "./lists.module.css";
 import {Field, Form, Formik} from "formik";
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faCirclePlus, faFloppyDisk, faUserPlus} from '@fortawesome/free-solid-svg-icons'
 
 //weird name is required, routes all /list, /list/* and /list/*/** here
 //see more: https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes
@@ -59,7 +61,8 @@ export default function ThankYouTableContainer() {
                     }
                     break;
                 case 404:
-                    toast.error('List not found at this URL')
+                    toast.error('List not found at this URL');
+                    removeListFromLocalStorage();
                     break;
                 default:
                     toast.error('Something went wrong')
@@ -117,14 +120,18 @@ export default function ThankYouTableContainer() {
             <Formik key="notes" enableReinitialize={true}
                     initialValues={initialValues}
                     onSubmit={save}>
-                    <Form>
+                <Form>
+                    <div className={styles.tableHeader}>
                         <Field name="listName" placeholder="Tracey & Andrew Baby Shower"/>
-                        <button type="submit">Save</button>
-                        <button type="button" onClick={share}>Share</button>
-                        <button type="button" onClick={createNew}>Create new list</button>
-
+                        <button type="submit">Save <FontAwesomeIcon icon={faFloppyDisk}/></button>
+                        <div className={styles.break}/>
+                        <button type="button" onClick={share}>Share <FontAwesomeIcon icon={faUserPlus}/></button>
+                        <button type="button" onClick={createNew}>New <FontAwesomeIcon icon={faCirclePlus}/></button>
+                    </div>
+                    <div>
                         <ThankYouTableEl/>
-                    </Form>
+                    </div>
+                </Form>
             </Formik>
         </div>
 

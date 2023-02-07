@@ -32,7 +32,7 @@ export default function ThankYouTableEl() {
     //For accessibility
     Modal.setAppElement('#__next');
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [sortAscending, setSortAscending] = useState(true);
+    const [sortAscending, setSortAscending] = useState(null);
 
     const [modalState, setModalState] = useState({msg: '', index: 0});
     const {values, setValues, setFieldValue} = useFormikContext();
@@ -80,7 +80,7 @@ export default function ThankYouTableEl() {
                         <img src="/thank-you.png" className={styles.icon} alt={"Thank You!"}/>
                         <FontAwesomeIcon className={sortAscending ? styles.activeIcon : undefined}
                                          icon={faArrowUpLong}/>
-                        <FontAwesomeIcon className={!sortAscending ? styles.activeIcon : undefined}
+                        <FontAwesomeIcon className={sortAscending === false ? styles.activeIcon : undefined}
                                          icon={faArrowDownLong}/>
                     </div>
                 </th>
