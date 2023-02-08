@@ -46,7 +46,7 @@ export default function MyApp({Component, pageProps}) {
             selector: '#step-4',
             content: ({setIsOpen}) => (
                 <div>
-                    <p>If you are having problems writing thank-yous, click here and we\'ll generate one and help you
+                    <p>If you are having problems writing thank-yous, click here and we'll generate one and help you
                         send it!</p>
                     <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
@@ -64,7 +64,7 @@ export default function MyApp({Component, pageProps}) {
             selector: '#step-6',
             content: ({setIsOpen}) => (
                 <div>
-                    <p>If you want, you can share the list with others here! It\'ll create a link you share around!</p>
+                    <p>You can change the list's name here!</p>
                     <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
         },
@@ -72,12 +72,20 @@ export default function MyApp({Component, pageProps}) {
             selector: '#step-7',
             content: ({setIsOpen}) => (
                 <div>
-                    <p>When you're ready, create a new list here!</p>
+                    <p>If you want, you can share the list with others here! It'll create a link you share around!</p>
                     <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
         },
         {
             selector: '#step-8',
+            content: ({setIsOpen}) => (
+                <div>
+                    <p>When you're ready, create a new list here!</p>
+                    <DismissButton setIsOpen={setIsOpen}/>
+                </div>)
+        },
+        {
+            selector: '#step-9',
             content: ({setIsOpen}) => (
                 <div>
                     <p>If you want to see this again, press here and you can see this again!</p>

@@ -204,15 +204,15 @@ export default function ThankYouTableContainer() {
                     innerRef={formikRef}>
                 <Form>
                     <div className={styles.tableHeader}>
-                        <Field name="listName" id="step-2" placeholder="Tracey & Andrew Baby Shower"/>
+                        <Field name="listName" id="step-6" placeholder="Tracey & Andrew Baby Shower"/>
                         <button type="submit" id="step-5">{!saved ?
                             <><FontAwesomeIcon icon={faArrowsRotate}/> Saving ...</> :
                             <><FontAwesomeIcon icon={faCheckCircle}/> Saved</>}
                         </button>
                         <div className={styles.break}/>
-                        <button type="button" id="step-6" onClick={share}>Share <FontAwesomeIcon icon={faUserPlus}/></button>
-                        <button type="button" id="step-7" onClick={createNew}>New <FontAwesomeIcon icon={faCirclePlus}/></button>
-                        <button type="button" id="step-8" className={styles.lastButton} onClick={() => {
+                        <button type="button" id="step-7" onClick={share}>Share <FontAwesomeIcon icon={faUserPlus}/></button>
+                        <button type="button" id="step-8" onClick={createNew}>New <FontAwesomeIcon icon={faCirclePlus}/></button>
+                        <button type="button" id="step-9" className={styles.lastButton} onClick={() => {
                             setCurrentStep(0);
                             setIsOpen(true);
                         }}><FontAwesomeIcon icon={faCircleQuestion}/></button>
