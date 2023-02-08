@@ -18,70 +18,70 @@ export default function MyApp({Component, pageProps}) {
     const steps = [
         {
             selector: '#step-1',
-            content: () => (
+            content: ({setIsOpen}) => (
                 <div>
                     <p>Welcome to <b>Thank you Assistant.</b></p>
                     <p>A simple platform to help you manage (& write) your thank you notes!</p>
-                    <DismissButton/>
+                    <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
 
         },
         {
             selector: '#step-2',
-            content: () => (
+            content: ({setIsOpen}) => (
                 <div>
                     <p>Start by adding the gifts you receive here</p>
-                    <DismissButton/>
+                    <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
         },
         {
             selector: '#step-3',
-            content: () => (
+            content: ({setIsOpen}) => (
                 <div>
                     <p>You can mark thank-yous as written/sent!</p>
-                    <DismissButton/>
+                    <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
         },
         {
             selector: '#step-4',
-            content: () => (
+            content: ({setIsOpen}) => (
                 <div>
                     <p>If you are having problems writing thank-yous, click here and we\'ll generate one and help you
                         send it!</p>
-                    <DismissButton/>
+                    <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
         },
         {
             selector: '#step-5',
-            content: () => (
+            content: ({setIsOpen}) => (
                 <div>
                     <p>The list will auto-save every few seconds (and load changes made by others), but you can click
                         here to save the latest progress!</p>
-                    <DismissButton/>
+                    <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
         },
         {
             selector: '#step-6',
-            content: () => (
+            content: ({setIsOpen}) => (
                 <div>
                     <p>If you want, you can share the list with others here! It\'ll create a link you share around!</p>
-                    <DismissButton/>
+                    <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
         },
         {
             selector: '#step-7',
-            content: () => (
+            content: ({setIsOpen}) => (
                 <div>
                     <p>When you're ready, create a new list here!</p>
-                    <DismissButton/>
+                    <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
         },
         {
             selector: '#step-8',
-            content: () => (
+            content: ({setIsOpen}) => (
                 <div>
                     <p>If you want to see this again, press here and you can see this again!</p>
-                    <DismissButton/>
+                    <DismissButton setIsOpen={setIsOpen}/>
                 </div>)
         },
         // ...
@@ -101,7 +101,7 @@ export default function MyApp({Component, pageProps}) {
     </GoogleOAuthProvider>
 }
 
-const DismissButton = () => (<button
+const DismissButton = (props) => (<button
     style={{
         padding: "0.4rem 0.6rem",
         backgroundColor: "transparent",
@@ -115,7 +115,7 @@ const DismissButton = () => (<button
     }}
     onClick={() => {
         setTutorialPlayed();
-    //    TODO dismiss
+        props.setIsOpen(false);
     }}
 >Don't show this again
 </button>)
