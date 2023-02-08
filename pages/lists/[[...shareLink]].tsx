@@ -176,23 +176,28 @@ export default function ThankYouTableContainer() {
     }
 
     const formChanged = () => {
-        if (JSON.stringify(formikRef.current.values.notes) === JSON.stringify([...savedList, createEmptyThankYouRow(), createEmptyThankYouRow()])) {
-            console.log('identical, skipping')
+        const formikFiltered = formikRef.current.values.notes.filter(el => !!el.name || !!el.gift || !!el.comment)
+        if (formikFiltered.length === 0) {
             return;
         }
-        if (formikRef.current.values.notes.filter(el => !el.name && !el.gift && !el.comment).length === 0) {
-            console.log('skipping, no notes');
+
+        if (JSON.stringify(formikFiltered) === JSON.stringify(savedList)) {
             return;
         }
-        //TODO bug here around timeouts, with one change it doesn't pick up 🤷‍♂️
         setSaved(false);
+
         if (!!saveTimeoutInterval) {
             clearTimeout(saveTimeoutInterval);
         }
         saveTimeoutInterval = setTimeout(() => {
-            if (!saved) {
-                save(formikRef.current.values).then();
-            }
+            setSaved(s => {
+                //fancy way to get state inside a setTimeout
+                if (!s) {
+                    save(formikRef.current.values).then();
+                }
+                return s;
+            })
+
         }, 3000);
     }
 
