@@ -9,6 +9,7 @@ import {useEffect, useRef, useState} from "react";
 import {ThankYouList, ThankYouRequest, ThankYouRow, ThankYouRowDto, ThankYouTable} from "../../common/thankYou";
 import toast from "react-hot-toast";
 import styles from "./lists.module.css";
+import buttons from '../../common/buttons.module.css';
 import {Field, Form, Formik} from "formik";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faArrowsRotate, faCheckCircle, faCirclePlus, faUserPlus, faCircleQuestion} from '@fortawesome/free-solid-svg-icons'
@@ -210,14 +211,14 @@ export default function ThankYouTableContainer() {
                 <Form>
                     <div className={styles.tableHeader}>
                         <Field name="listName" id="step-6" placeholder="Tracey & Andrew Baby Shower"/>
-                        <button type="submit" id="step-5">{!saved ?
+                        <button className={buttons.basicButton} type="submit" id="step-5">{!saved ?
                             <><FontAwesomeIcon icon={faArrowsRotate}/> Saving ...</> :
                             <><FontAwesomeIcon icon={faCheckCircle}/> Saved</>}
                         </button>
                         <div className={styles.break}/>
-                        <button type="button" id="step-7" onClick={share}>Share <FontAwesomeIcon icon={faUserPlus}/></button>
-                        <button type="button" id="step-8" onClick={createNew}>New <FontAwesomeIcon icon={faCirclePlus}/></button>
-                        <button type="button" id="step-9" className={styles.lastButton} onClick={() => {
+                        <button className={buttons.basicButton} type="button" id="step-7" onClick={share}>Share <FontAwesomeIcon icon={faUserPlus}/></button>
+                        <button className={buttons.basicButton} type="button" id="step-8" onClick={createNew}>New <FontAwesomeIcon icon={faCirclePlus}/></button>
+                        <button type="button" id="step-9" className={`${buttons.lastButton} ${buttons.basicButton}`} onClick={() => {
                             setCurrentStep(0);
                             setIsOpen(true);
                         }}><FontAwesomeIcon icon={faCircleQuestion}/></button>

@@ -64,15 +64,6 @@ table .lastColumn {
   color: var(--gray-9);
 }
 
-.generateBtn {
-  display: flex;
-  gap: 0.3rem
-}
-
-.generateBtn .icon {
-  max-width: 20px;
-}
-
 .table tr.completeRow {
   background-color: #85A8C5;
 }

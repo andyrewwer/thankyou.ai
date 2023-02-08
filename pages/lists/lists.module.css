@@ -19,28 +19,6 @@
     margin: auto;
 }
 
-.tableHeader button {
-    padding: 0.4rem 0.6rem;
-    background-color: transparent;
-    border: 1px solid var(--stone-4);
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 150;
-    color: var(--stone-8);
-}
-
-.tableHeader button svg {
-    margin-left: 0.1rem;
-}
-
-.tableHeader button:hover {
-    background-color: var(--stone-2);
-}
-
-.lastButton {
-    margin-right: 0.5rem;
-}
-
 @media screen and (max-width: 760px) {
     .tableHeader {
         overflow-x: scroll;

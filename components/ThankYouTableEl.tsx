@@ -1,4 +1,5 @@
 import styles from "./table.module.css";
+import buttons from '../common/buttons.module.css';
 import {Field, FieldArray, useFormikContext} from 'formik';
 import {ThankYouRow, ThankYouTable} from "../common/thankYou";
 import {useEffect, useState} from "react";
@@ -122,11 +123,10 @@ export default function ThankYouTableEl(props) {
                                                     <Field type="checkbox"
                                                            name={`notes.${index}.thankYouWritten`}
                                                            id={index === 0 ? "step-3" : `written${index}`}/>
-                                                    <button type="button" className={styles.generateBtn}
+                                                    <button type="button" className={`${buttons.basicButton} ${buttons.flexButton}`}
                                                             onClick={() => generate(r, index)}
                                                             id={index === 0 ? "step-4" : `written${index}`}>
                                                         Generate <img src="/thank-you.png"
-                                                                      className={styles.icon}
                                                                       alt={"Thank You!"}/></button>
                                                 </div>
                                             </td>
