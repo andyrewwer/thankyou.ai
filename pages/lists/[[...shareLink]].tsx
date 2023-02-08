@@ -11,8 +11,9 @@ import toast from "react-hot-toast";
 import styles from "./lists.module.css";
 import {Field, Form, Formik} from "formik";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowsRotate, faCheckCircle, faCirclePlus, faUserPlus} from '@fortawesome/free-solid-svg-icons'
+import {faArrowsRotate, faCheckCircle, faCirclePlus, faUserPlus, faCircleQuestion} from '@fortawesome/free-solid-svg-icons'
 import axios from "axios";
+import {useTour} from "@reactour/tour";
 
 //weird name is required, routes all /list, /list/* and /list/*/** here
 //see more: https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes
@@ -26,6 +27,8 @@ export default function ThankYouTableContainer() {
         notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
     });
     const [savedList, setSavedList] = useState<ThankYouRow[]>([]);
+    const { setIsOpen, setCurrentStep } = useTour()
+
     let saveTimeoutInterval;
 
     useEffect(() => {
@@ -188,16 +191,20 @@ export default function ThankYouTableContainer() {
                     innerRef={formikRef}>
                 <Form>
                     <div className={styles.tableHeader}>
-                        <Field name="listName" placeholder="Tracey & Andrew Baby Shower"/>
-                        <button type="submit">{!saved ?
+                        <Field name="listName" id="step-2" placeholder="Tracey & Andrew Baby Shower"/>
+                        <button type="submit" id="step-5">{!saved ?
                             <><FontAwesomeIcon icon={faArrowsRotate}/> Saving ...</> :
                             <><FontAwesomeIcon icon={faCheckCircle}/> Saved</>}
                         </button>
                         <div className={styles.break}/>
-                        <button type="button" onClick={share}>Share <FontAwesomeIcon icon={faUserPlus}/></button>
-                        <button type="button" onClick={createNew}>New <FontAwesomeIcon icon={faCirclePlus}/></button>
+                        <button type="button" id="step-6" onClick={share}>Share <FontAwesomeIcon icon={faUserPlus}/></button>
+                        <button type="button" id="step-7" onClick={createNew}>New <FontAwesomeIcon icon={faCirclePlus}/></button>
+                        <button type="button" id="step-8" className={styles.lastButton} onClick={() => {
+                            setCurrentStep(0);
+                            setIsOpen(true);
+                        }}><FontAwesomeIcon icon={faCircleQuestion}/></button>
                     </div>
-                    <div>
+                    <div id="step-2">
                         <ThankYouTableEl formChanged={formChanged}/>
                     </div>
                 </Form>

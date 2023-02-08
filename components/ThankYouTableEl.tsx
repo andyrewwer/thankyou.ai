@@ -120,9 +120,11 @@ export default function ThankYouTableEl(props) {
                                             <td>
                                                 <div style={{display: "flex", gap: "0.5rem"}}>
                                                     <Field type="checkbox"
-                                                           name={`notes.${index}.thankYouWritten`}/>
+                                                           name={`notes.${index}.thankYouWritten`}
+                                                           id={index === 0 ? "step-3" : `written${index}`}/>
                                                     <button type="button" className={styles.generateBtn}
-                                                            onClick={() => generate(r, index)}>
+                                                            onClick={() => generate(r, index)}
+                                                            id={index === 0 ? "step-4" : `written${index}`}>
                                                         Generate <img src="/thank-you.png"
                                                                       className={styles.icon}
                                                                       alt={"Thank You!"}/></button>

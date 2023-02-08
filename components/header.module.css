@@ -8,11 +8,18 @@
   background-color: var(--gray-2);
 }
 
+.noRightBorder {
+  border-right-color: transparent!important;
+}
+
 .title {
   font-size: 2rem;
   font-weight: bold;
   color: var(--brown-9);
-  padding-right: 4.5rem;
+}
+
+.container .break {
+  margin-left: 4.5rem;
 }
 
 .container li {

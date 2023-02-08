@@ -38,6 +38,10 @@
     background-color: var(--stone-2);
 }
 
+.lastButton {
+    margin-right: 0.5rem;
+}
+
 @media screen and (max-width: 760px) {
     .tableHeader {
         overflow-x: scroll;
