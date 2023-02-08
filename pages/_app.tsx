@@ -7,6 +7,7 @@ import Head from "next/head";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import {TourProvider} from '@reactour/tour'
+import {setTutorialPlayed} from "../common/SessionService";
 
 //for FontAwesome
 config.autoAddCss = false
@@ -21,49 +22,67 @@ export default function MyApp({Component, pageProps}) {
                 <div>
                     <p>Welcome to <b>Thank you Assistant.</b></p>
                     <p>A simple platform to help you manage (& write) your thank you notes!</p>
-                <button
-                    style={{
-                    border: "1px solid #f7f7f7",
-                    background: "none",
-                    padding: ".3em .7em",
-                    fontSize: "inherit",
-                    display: "block",
-                    cursor: "pointer",
-                    margin: "1em auto"
-                }}
-                    // onClick={() => setCurrentStep(1)}
-                    >Don't show this again
-                </button>
+                    <DismissButton/>
                 </div>)
 
         },
         {
             selector: '#step-2',
-            content: 'Start by adding the gifts you receive here',
+            content: () => (
+                <div>
+                    <p>Start by adding the gifts you receive here</p>
+                    <DismissButton/>
+                </div>)
         },
         {
             selector: '#step-3',
-            content: 'You can mark thank-yous as written/sent!',
+            content: () => (
+                <div>
+                    <p>You can mark thank-yous as written/sent!</p>
+                    <DismissButton/>
+                </div>)
         },
         {
             selector: '#step-4',
-            content: 'If you are having problems writing thank-yous, click here and we\'ll generate one and help you send it!',
+            content: () => (
+                <div>
+                    <p>If you are having problems writing thank-yous, click here and we\'ll generate one and help you
+                        send it!</p>
+                    <DismissButton/>
+                </div>)
         },
         {
             selector: '#step-5',
-            content: 'The list will auto-save every few seconds (and load changes made by others), but you can click here to save the latest progress!',
+            content: () => (
+                <div>
+                    <p>The list will auto-save every few seconds (and load changes made by others), but you can click
+                        here to save the latest progress!</p>
+                    <DismissButton/>
+                </div>)
         },
         {
             selector: '#step-6',
-            content: 'If you want, you can share the list with others here! It\'ll create a link you share around!',
+            content: () => (
+                <div>
+                    <p>If you want, you can share the list with others here! It\'ll create a link you share around!</p>
+                    <DismissButton/>
+                </div>)
         },
         {
             selector: '#step-7',
-            content: `When you're ready, create a new list here!`,
+            content: () => (
+                <div>
+                    <p>When you're ready, create a new list here!</p>
+                    <DismissButton/>
+                </div>)
         },
         {
             selector: '#step-8',
-            content: `If you want to see this again, press here and you can see this again!`,
+            content: () => (
+                <div>
+                    <p>If you want to see this again, press here and you can see this again!</p>
+                    <DismissButton/>
+                </div>)
         },
         // ...
     ]
@@ -81,3 +100,22 @@ export default function MyApp({Component, pageProps}) {
         </TourProvider>
     </GoogleOAuthProvider>
 }
+
+const DismissButton = () => (<button
+    style={{
+        padding: "0.4rem 0.6rem",
+        backgroundColor: "transparent",
+        border: "1px solid var(--stone-4)",
+        borderRadius: "5px",
+        cursor: "pointer",
+        fontWeight: "150",
+        color: "var(--stone-8)",
+        display: "block",
+        margin: "1em auto"
+    }}
+    onClick={() => {
+        setTutorialPlayed();
+    //    TODO dismiss
+    }}
+>Don't show this again
+</button>)
