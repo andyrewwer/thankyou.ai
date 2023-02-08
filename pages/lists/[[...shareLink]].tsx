@@ -1,7 +1,8 @@
 import ThankYouTableEl, {createEmptyThankYouRow} from "../../components/ThankYouTableEl";
 import {useRouter} from 'next/router'
 import {
-    getSavedListFromLocalStorage, getTutorialPlayed,
+    getSavedListFromLocalStorage,
+    getTutorialPlayed,
     removeListFromLocalStorage,
     saveListToLocalStorage
 } from "../../common/SessionService";
@@ -12,7 +13,14 @@ import styles from "./lists.module.css";
 import buttons from '../../common/buttons.module.css';
 import {Field, Form, Formik} from "formik";
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faArrowsRotate, faCheckCircle, faCirclePlus, faUserPlus, faCircleQuestion} from '@fortawesome/free-solid-svg-icons'
+import {
+    faArrowsRotate,
+    faCheckCircle,
+    faCirclePlus,
+    faCircleQuestion,
+    faUserPlus,
+    faFloppyDisk
+} from '@fortawesome/free-solid-svg-icons'
 import axios from "axios";
 import {useTour} from "@reactour/tour";
 
@@ -87,6 +95,11 @@ export default function ThankYouTableContainer() {
     const save = async (_values) => {
         let inputFiltered = _values.notes
             .filter((item: ThankYouRow) => !!item.thankYouWritten || !!item.name || !!item.gift || !!item.comment);
+
+        if (inputFiltered.length === 0) {
+            toast('Nothing to save. Add some gifts and try again!')
+            return
+        }
 
         const _add: ThankYouRowDto[] = inputFiltered
             .filter((a: ThankYouRow) => {
@@ -211,9 +224,12 @@ export default function ThankYouTableContainer() {
                 <Form>
                     <div className={styles.tableHeader}>
                         <Field name="listName" id="step-6" placeholder="Tracey & Andrew Baby Shower"/>
-                        <button className={buttons.basicButton} type="submit" id="step-5">{!saved ?
-                            <><FontAwesomeIcon icon={faArrowsRotate}/> Saving ...</> :
-                            <><FontAwesomeIcon icon={faCheckCircle}/> Saved</>}
+                        <button className={buttons.basicButton} type="submit" id="step-5">
+                            {savedList.length === 0 ?
+                                <><FontAwesomeIcon icon={faFloppyDisk}/> Save</> : !saved ?
+                                <><FontAwesomeIcon icon={faArrowsRotate}/> Saving ...</> :
+                                <><FontAwesomeIcon icon={faCheckCircle}/> Saved</>
+                            }
                         </button>
                         <div className={styles.break}/>
                         <button className={buttons.basicButton} type="button" id="step-7" onClick={share}>Share <FontAwesomeIcon icon={faUserPlus}/></button>
