@@ -1,7 +1,7 @@
 import ThankYouTableEl, {createEmptyThankYouRow} from "../../components/ThankYouTableEl";
 import {useRouter} from 'next/router'
 import {
-    getSavedListFromLocalStorage,
+    getSavedListFromLocalStorage, getTutorialPlayed,
     removeListFromLocalStorage,
     saveListToLocalStorage
 } from "../../common/SessionService";
@@ -32,6 +32,13 @@ export default function ThankYouTableContainer() {
     let saveTimeoutInterval;
 
     useEffect(() => {
+        if (!getTutorialPlayed()) {
+            setIsOpen(true);
+            // setTutorialPlayed(); // button don't show me again
+        }
+    }, [setIsOpen]);
+
+    useEffect(() => {
         if (!router.isReady) {
             return;
         }
@@ -53,11 +60,10 @@ export default function ThankYouTableContainer() {
                 try {
                     const val: ThankYouList = res.data;
                     let list = val.list;
-                    setSavedList(list)
-                    list.push(createEmptyThankYouRow(), createEmptyThankYouRow())
+                    setSavedList(val.list)
                     setInitialValues({
-                        notes: list,
-                        listName: val.listName
+                        listName: val.listName,
+                        notes: [...list, createEmptyThankYouRow(), createEmptyThankYouRow()],
                     });
                     setShareLink(val.shareLink)
                     toast.success(`Loaded list '${val.listName}'`)
@@ -145,9 +151,8 @@ export default function ThankYouTableContainer() {
         setSavedList(data.list);
         setInitialValues({
             listName: data.listName,
-            notes: data.list
+            notes: [...data.list, createEmptyThankYouRow(), createEmptyThankYouRow()]
         });
-
     }
 
     const share = async () => {
@@ -171,7 +176,15 @@ export default function ThankYouTableContainer() {
     }
 
     const formChanged = () => {
-        //TODO bug starts unsaved because form changes right at the start
+        if (JSON.stringify(formikRef.current.values.notes) === JSON.stringify([...savedList, createEmptyThankYouRow(), createEmptyThankYouRow()])) {
+            console.log('identical, skipping')
+            return;
+        }
+        if (formikRef.current.values.notes.filter(el => !el.name && !el.gift && !el.comment).length === 0) {
+            console.log('skipping, no notes');
+            return;
+        }
+        //TODO bug here around timeouts, with one change it doesn't pick up 🤷‍♂️
         setSaved(false);
         if (!!saveTimeoutInterval) {
             clearTimeout(saveTimeoutInterval);

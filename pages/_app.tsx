@@ -21,6 +21,19 @@ export default function MyApp({Component, pageProps}) {
                 <div>
                     <p>Welcome to <b>Thank you Assistant.</b></p>
                     <p>A simple platform to help you manage (& write) your thank you notes!</p>
+                <button
+                    style={{
+                    border: "1px solid #f7f7f7",
+                    background: "none",
+                    padding: ".3em .7em",
+                    fontSize: "inherit",
+                    display: "block",
+                    cursor: "pointer",
+                    margin: "1em auto"
+                }}
+                    // onClick={() => setCurrentStep(1)}
+                    >Don't show this again
+                </button>
                 </div>)
 
         },

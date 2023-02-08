@@ -9,3 +9,11 @@ export const saveListToLocalStorage = (shareLink: string) => {
 export const removeListFromLocalStorage = () => {
     return localStorage.removeItem('thankYouList');
 }
+
+export const getTutorialPlayed = (): boolean => {
+    return !!localStorage.getItem('tutorialPlayed') || false;
+}
+
+export const setTutorialPlayed = () => {
+    return localStorage.setItem('tutorialPlayed', 'true');
+}
