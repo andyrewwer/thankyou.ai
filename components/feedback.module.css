@@ -1,0 +1,60 @@
+.container {
+  width: 50ch;
+  display: flex;
+  flex-direction: column;
+}
+
+.container h1 {
+  color: var(--brown-7);
+  font-size: 1.5rem;
+  margin-bottom: 0;
+}
+.container span {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--stone-9);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form .formGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+}
+
+.form .formGroup div {
+  display: flex;
+}
+
+.form div label {
+  width: 10ch;
+  color: var(--brown-8)
+}
+
+.form div input, .form div textarea {
+  width: 35ch;
+  padding: 0.5rem 0.15rem;
+  border: 1px solid var(--brown-6);
+  border-radius: 4px;
+  outline-color: var(--brown-8);
+}
+
+.form button {
+  margin-top: 0.75rem;
+}
+
+.break {
+  flex-basis: 100%;
+  height: 0;
+}
+
+.form .errors {
+  color: var(--red-8);
+  font-style: italic;
+  transform: translateX(10ch) translateY(2px);
+}

@@ -48,10 +48,18 @@ Need to be run manually
 
 ```postgresql
 CREATE TABLE "thank_you_list" (
-   "id"             VARCHAR NOT NULL,
+   "id"              VARCHAR NOT NULL,
    "share_link"      VARCHAR NOT NULL,
    "list_name"       VARCHAR NOT NULL,
-   "list"           jsonb NOT NULL,
+   "list"            jsonb NOT NULL,
+   PRIMARY KEY ("id")
+);
+
+CREATE TABLE "feedback" (
+   "id"              VARCHAR NOT NULL,
+   "name"            VARCHAR NOT NULL,
+   "email"           VARCHAR NOT NULL,
+   "feedback"        VARCHAR NOT NULL,
    PRIMARY KEY ("id")
 );
 ```
