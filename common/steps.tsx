@@ -78,6 +78,14 @@ export const steps = [
             </div>)
     },
     {
+        selector: '#step-10',
+        content: ({setIsOpen}) => (
+            <div>
+                <p>If you have feedback, I'd love to hear it and appreciate you spending the time! </p>
+                <DismissButton setIsOpen={setIsOpen}/>
+            </div>)
+    },
+    {
         selector: '#step-2',
         content: ({setIsOpen}) => (
             <div>

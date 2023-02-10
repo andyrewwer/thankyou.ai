@@ -31,7 +31,7 @@ export default function Header() {
         <li className={styles.break}/>
         <li className={/\/lists*/.test(path) ? styles.active : ''}><a href="/lists">Home</a></li>
         <li className={path === "/generate-note" ? styles.active : ''}><a href="/generate-note">Note Generator</a></li>
-        <li className={styles.feedback}><a onClick={() => setModalIsOpen(true)}><FontAwesomeIcon icon={faMessage}/> Give Feedback </a></li>
+        <li className={styles.feedback} id="step-10"><a onClick={() => setModalIsOpen(true)}><FontAwesomeIcon icon={faMessage}/> Give Feedback </a></li>
         <Modal
             isOpen={modalIsOpen}
             onRequestClose={() => setModalIsOpen(false)}
