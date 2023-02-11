@@ -18,7 +18,7 @@ export default function MyApp({Component, pageProps}) {
     return <GoogleOAuthProvider clientId="1087397770403-hbosj4rl65mc0pdq2f585e9r5bp3s47v.apps.googleusercontent.com">
         <TourProvider steps={steps}>
             <Head>
-                <title>Thank You.ai</title>
+                <title>Thank You Assistant</title>
                 <link rel="icon" href="/thank-you.png"/>
             </Head>
             <Header/>

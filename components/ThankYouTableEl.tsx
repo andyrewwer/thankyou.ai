@@ -20,6 +20,7 @@ const customStyles = {
         transform: 'translate(-50%, -50%)',
     },
 };
+const REMOVE_ROWS_FROM_BOTTOM = process.env.NEXT_PUBLIC_REMOVE_ROWS_FROM_BOTTOM === 'true'
 
 export const createEmptyThankYouRow = (): ThankYouRow => {
     return ({
@@ -32,7 +33,7 @@ export const createEmptyThankYouRow = (): ThankYouRow => {
 };
 
 export default function ThankYouTableEl(props) {
-    const {formChanged} = props;
+    const {formChanged, handleBlur} = props;
 
     //For accessibility
     Modal.setAppElement('#__next');
@@ -107,15 +108,22 @@ export default function ThankYouTableEl(props) {
                                                 <Field type="hidden" name={`notes.${index}.id`}/>
                                                 <Field type="text" name={`notes.${index}.name`}
                                                        placeholder="John Doe"
-                                                       onBlur={() => addOrRemoveRowsOnBlur(arrayHelpers, index)}/>
+                                                       onBlur={() => {
+                                                           handleBlur();
+                                                           addOrRemoveRowsOnBlur(arrayHelpers, index)
+                                                       }}/>
                                             </td>
                                             <td>
                                                 <Field type="text" name={`notes.${index}.gift`}
                                                        placeholder="Brief Description of the Gift"
-                                                       onBlur={() => addOrRemoveRowsOnBlur(arrayHelpers, index)}/>
+                                                       onBlur={() => {
+                                                           handleBlur();
+                                                           addOrRemoveRowsOnBlur(arrayHelpers, index)
+                                                       }}/>
                                             </td>
                                             <td>
                                                 <Field type="text" name={`notes.${index}.comment`}
+                                                       onBlur={() => handleBlur()}
                                                        placeholder="Any comments"/>
                                             </td>
                                             <td>
@@ -164,6 +172,9 @@ const addRowsToBottom = (arrayHelpers, notes, index) => {
 }
 
 const removeRowsFromBottom = (arrayHelpers, notes, index) => {
+    if (!REMOVE_ROWS_FROM_BOTTOM) {
+        return;
+    }
     const thirdFromLastNote = notes[notes.length - 3];
 
     if (index === notes.length - 3) {

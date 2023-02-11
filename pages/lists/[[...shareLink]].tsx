@@ -38,12 +38,9 @@ export default function ThankYouTableContainer() {
     const [savedList, setSavedList] = useState<ThankYouRow[]>([]);
     const { setIsOpen, setCurrentStep } = useTour()
 
-    let saveTimeoutInterval;
-
     useEffect(() => {
         if (!getTutorialPlayed()) {
             setIsOpen(true);
-            // setTutorialPlayed(); // button don't show me again
         }
     }, [setIsOpen]);
 
@@ -191,28 +188,21 @@ export default function ThankYouTableContainer() {
 
     const formChanged = () => {
         const formikFiltered = formikRef.current.values.notes.filter(el => !!el.name || !!el.gift || !!el.comment)
-        if (formikFiltered.length === 0) {
-            return;
-        }
 
-        if (JSON.stringify(formikFiltered) === JSON.stringify(savedList)) {
+        if (!hasFormChanged(formikFiltered, savedList)) {
             return;
         }
         setSaved(false);
+        console.log('form changed! ')
+    }
 
-        if (!!saveTimeoutInterval) {
-            clearTimeout(saveTimeoutInterval);
+    const onBlurSave = () => {
+        const formikFiltered = formikRef.current.values.notes.filter(el => !!el.name || !!el.gift || !!el.comment)
+
+        if (!hasFormChanged(formikFiltered, savedList)) {
+            return;
         }
-        saveTimeoutInterval = setTimeout(() => {
-            setSaved(s => {
-                //fancy way to get state inside a setTimeout
-                if (!s) {
-                    save(formikRef.current.values).then();
-                }
-                return s;
-            })
-
-        }, 3000);
+        save(formikRef.current.values).then();
     }
 
     return (
@@ -240,11 +230,21 @@ export default function ThankYouTableContainer() {
                         }}><FontAwesomeIcon icon={faCircleQuestion}/></button>
                     </div>
                     <div id="step-2">
-                        <ThankYouTableEl formChanged={formChanged}/>
+                        <ThankYouTableEl formChanged={formChanged} handleBlur={onBlurSave}/>
                     </div>
                 </Form>
             </Formik>
         </div>
 
     );
+}
+
+const hasFormChanged = (current, saved) => {
+    if (current.length === 0) {
+        return false;
+    }
+
+    return JSON.stringify(current) !== JSON.stringify(saved);
+
+
 }
