@@ -35,10 +35,7 @@ export default function ThankYouTableContainer() {
         noteName: 'Thank You List #001',
         notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
     });
-    const [selectedRow, setSelectedRow] = useState({
-        index: null,
-        row: createEmptyThankYouRow()
-    })
+    const [selectedRow, setSelectedRow] = useState<string>(null)
     const [savedList, setSavedList] = useState<ThankYouRow[]>([]);
     const { setIsOpen, setCurrentStep } = useTour()
 
@@ -167,8 +164,10 @@ export default function ThankYouTableContainer() {
         console.log('data', data.notes)
         console.log('selected Row', selectedRow)
         const _savedList = data.notes.map(_row => {
-            if (_row.id === selectedRow.row.id) {
-                return selectedRow.row
+            if (_row.id === selectedRow) {
+                //
+                // return selectedRow
+                return formikRef.current.values.notes.filter(note => note.id === selectedRow);
             }
             return _row;
         })
@@ -223,11 +222,8 @@ export default function ThankYouTableContainer() {
         save(formikRef.current.values).then();
     }
 
-    const handleFocus = (index, row) => {
-        setSelectedRow({
-            index: index,
-            row: row
-        })
+    const handleFocus = (row) => {
+        setSelectedRow(row.id)
     }
 
     return (
