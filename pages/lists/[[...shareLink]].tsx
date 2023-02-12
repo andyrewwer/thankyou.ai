@@ -167,7 +167,7 @@ export default function ThankYouTableContainer() {
             if (_row.id === selectedRow) {
                 //
                 // return selectedRow
-                return formikRef.current.values.notes.filter(note => note.id === selectedRow);
+                return formikRef.current.values.notes.filter(note => note.id === selectedRow)[0];
             }
             return _row;
         })
