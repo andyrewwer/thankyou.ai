@@ -1,4 +1,4 @@
-import {ListService} from "./util/ListService";
+import {NoteService} from "./util/NoteService";
 import type {NextApiRequest, NextApiResponse} from 'next'
 
 export default async function handle(req: NextApiRequest, res: NextApiResponse) {
@@ -9,23 +9,23 @@ export default async function handle(req: NextApiRequest, res: NextApiResponse) 
     let record
     switch (method) {
         case 'GET':
-            const list = await ListService.findByShareLink(shareLink);
-            if (!! list) {
-                res.status(200).json(list)
+            const note = await NoteService.findByShareLink(shareLink);
+            if (!! note) {
+                res.status(200).json(note)
             } else {
                 res.status(404).end()
             }
             break
         case 'POST':
-            record = await ListService.save(req.body);
+            record = await NoteService.save(req.body);
             res.status(200).json(record);
             break
         case 'PATCH':
-            record = await ListService.update(req.body);
+            record = await NoteService.update(req.body);
             res.status(200).json({
                 shareLink: record.shareLink,
-                listName: record.listName,
-                list: JSON.parse(record.list)
+                noteName: record.noteName,
+                notes: JSON.parse(record.notes)
             });
             break
         default:

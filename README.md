@@ -51,7 +51,7 @@ CREATE TABLE "thank_you_list" (
    "id"              VARCHAR NOT NULL,
    "share_link"      VARCHAR NOT NULL,
    "list_name"       VARCHAR NOT NULL,
-   "list"            jsonb NOT NULL,
+   "notes"            jsonb NOT NULL,
    PRIMARY KEY ("id")
 );
 

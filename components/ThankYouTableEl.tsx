@@ -1,7 +1,7 @@
 import styles from "./table.module.css";
 import buttons from '../common/buttons.module.css';
 import {Field, FieldArray, useFormikContext} from 'formik';
-import {ThankYouRow, ThankYouTable} from "../common/thankYou";
+import {ThankYouRequest, ThankYouRow, ThankYouRowDto, ThankYouTable} from "../common/thankYou";
 import {useEffect, useState} from "react";
 import Modal from 'react-modal';
 import NoteGenerator from "../pages/generate-note";
@@ -41,21 +41,21 @@ export default function ThankYouTableEl(props) {
     const [sortAscending, setSortAscending] = useState(null);
 
     const [modalState, setModalState] = useState({msg: '', index: 0});
-    const {values, setValues, setFieldValue} = useFormikContext();
+    // @ts-ignore
+    const {values, setValues, setFieldValue}: {values: ThankYouRequest, setValues: (values: ThankYouRequest) => void, setFieldValue: (field: string, value: any) => void} = useFormikContext();
 
     useEffect(() => {
         formChanged();
     }, [values]);
 
-    const generate = (note: ThankYouRow, index) => {
+    const generate = (note: ThankYouRowDto, index) => {
         setModalState({msg: `${note.gift} from ${note.name}`, index: index})
         setModalIsOpen(true);
     }
 
     const closeModal = (success = false) => {
         if (success) {
-            // @ts-ignore
-            const notes: ThankYouRow[] = values.notes;
+            const notes: ThankYouRowDto[] = values.notes;
             notes[modalState.index].thankYouWritten = true;
             setFieldValue('notes', notes);
             toast.success("Marked thank-you as sent")
@@ -65,7 +65,6 @@ export default function ThankYouTableEl(props) {
 
     const sort = () => {
         const multiplier = sortAscending ? 1 : -1;
-        // @ts-ignore
         const temp: ThankYouTable = Object.assign(values);
         temp.notes.sort((a, b) => {
             if (a.thankYouWritten) return 1 * multiplier;
@@ -100,7 +99,6 @@ export default function ThankYouTableEl(props) {
                         render={arrayHelpers => {
                             return (
                                 <>
-                                    {/*@ts-ignore*/}
                                     {values.notes.length > 0 && values.notes.map((r, index) => (
                                         <tr key={index}
                                             className={r.thankYouWritten ? styles.completeRow : undefined}>

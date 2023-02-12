@@ -5,9 +5,9 @@ import {ThankYouList, ThankYouRecord, ThankYouRequest, ThankYouRow, ThankYouRowD
 
 const LIST_TABLE_NAME = process.env.LIST_TABLE_NAME;
 
-export const ListService = {
+export const NoteService = {
     save: async function (body: ThankYouRequest) {
-        const toBeSaved = body.list
+        const toBeSaved = body.notes
             .filter(item => item.action === 'ADD')
             .map((val:ThankYouRow) => ({
             id: val.id,
@@ -19,8 +19,8 @@ export const ListService = {
         const record: ThankYouRecord = {
             id: uuidv4(),
             shareLink: uuidv4(),
-            listName: body.listName,
-            list: JSON.stringify(toBeSaved)
+            noteName: body.noteName,
+            notes: JSON.stringify(toBeSaved)
         }
 
         await Database.save(LIST_TABLE_NAME, record);
@@ -32,15 +32,15 @@ export const ListService = {
     },
 
     update: async function (body: ThankYouRequest) {
-        const current = await ListService.findByShareLink(body.shareLink);
+        const current = await NoteService.findByShareLink(body.shareLink);
         if (!current) {
-            return ListService.save(body);
+            return NoteService.save(body);
         }
-        let list = current.list;
-        for (let i = 0; i < body.list.length; i ++) {
-            let item: ThankYouRowDto = body.list[i]
+        let notes = current.notes;
+        for (let i = 0; i < body.notes.length; i ++) {
+            let item: ThankYouRowDto = body.notes[i]
             if (item.action === 'ADD') {
-                list.push({
+                notes.push({
                     id: item.id,
                     name: item.name,
                     gift: item.gift,
@@ -51,9 +51,9 @@ export const ListService = {
             }
 
             if (item.action === 'EDIT') {
-                const index = list.findIndex(obj => obj.id === item.id);
+                const index = notes.findIndex(obj => obj.id === item.id);
                 if (index < 0) {
-                    list.push({
+                    notes.push({
                         id: item.id,
                         name: item.name,
                         gift: item.gift,
@@ -63,7 +63,7 @@ export const ListService = {
                     console.log('adding instead of edit');
                     continue;
                 }
-                list[index] = {
+                notes[index] = {
                     id: item.id,
                     name: item.name,
                     gift: item.gift,
@@ -74,23 +74,23 @@ export const ListService = {
             }
 
             if (item.action === 'DELETE') {
-                const index = list.findIndex(obj => obj.id === item.id);
+                const index = notes.findIndex(obj => obj.id === item.id);
                 if (index < 0 ) {
                     console.log('not found skipping deletion');
                     continue;
                 }
-                list.splice(index, 1);
+                notes.splice(index, 1);
                 continue;
             }
             throw new Error('unrecognized action')
 
         }
-        console.log('final list', list)
+        console.log('final notes', notes)
         const record: ThankYouRecord = {
             id: current.id,
             shareLink: current.shareLink,
-            listName: body.listName,
-            list: JSON.stringify(list)
+            noteName: body.noteName,
+            notes: JSON.stringify(notes)
         }
         await Database.update(LIST_TABLE_NAME, record, current.id)
         return record

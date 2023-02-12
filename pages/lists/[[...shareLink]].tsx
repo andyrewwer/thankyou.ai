@@ -1,10 +1,10 @@
 import ThankYouTableEl, {createEmptyThankYouRow} from "../../components/ThankYouTableEl";
 import {useRouter} from 'next/router'
 import {
-    getSavedListFromLocalStorage,
+    getSavedNotesFromLocalStorage,
     getTutorialPlayed,
-    removeListFromLocalStorage,
-    saveListToLocalStorage
+    removeNotesFromLocalStorage,
+    saveNotesToLocalStorage
 } from "../../common/SessionService";
 import {useEffect, useRef, useState} from "react";
 import {ThankYouList, ThankYouRequest, ThankYouRow, ThankYouRowDto, ThankYouTable} from "../../common/thankYou";
@@ -32,7 +32,7 @@ export default function ThankYouTableContainer() {
     const [shareLink, setShareLink] = useState('')
     const [saved, setSaved] = useState(true)
     const [initialValues, setInitialValues] = useState<ThankYouTable>({
-        listName: 'Thank You List #001',
+        noteName: 'Thank You List #001',
         notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
     });
     const [selectedRow, setSelectedRow] = useState({
@@ -58,7 +58,7 @@ export default function ThankYouTableContainer() {
         _shareLink = _shareLink[0];
 
         if (!_shareLink) {
-            const localStorageLink = getSavedListFromLocalStorage()
+            const localStorageLink = getSavedNotesFromLocalStorage()
             if (!localStorageLink) {
                 return
             }
@@ -70,21 +70,21 @@ export default function ThankYouTableContainer() {
             if (res.status === 200) {
                 try {
                     const val: ThankYouList = res.data;
-                    let list = val.list;
-                    setSavedList(val.list)
+                    let notes = val.notes;
+                    setSavedList(val.notes)
                     setInitialValues({
-                        listName: val.listName,
-                        notes: [...list, createEmptyThankYouRow(), createEmptyThankYouRow()],
+                        noteName: val.noteName,
+                        notes: [...notes, createEmptyThankYouRow(), createEmptyThankYouRow()],
                     });
                     setShareLink(val.shareLink)
-                    toast.success(`Loaded list '${val.listName}'`)
+                    toast.success(`Loaded list '${val.noteName}'`)
                 } catch (e) {
                     toast.error('Failed to fetch list')
                     console.log('inner error', e)
                 }
             } else if (res.status === 404) {
                 toast.error('List not found at this URL');
-                removeListFromLocalStorage();
+                removeNotesFromLocalStorage();
             } else {
                 toast.error('Something went wrong')
             }
@@ -92,7 +92,7 @@ export default function ThankYouTableContainer() {
             console.log('error', e);
             toast.error('Something went wrong 🙁')
         });
-    }, [router, getSavedListFromLocalStorage])
+    }, [router, getSavedNotesFromLocalStorage])
 
     const save = async (_values) => {
         let inputFiltered = _values.notes
@@ -146,8 +146,8 @@ export default function ThankYouTableContainer() {
 
         const body: ThankYouRequest = {
             shareLink: shareLink,
-            listName: _values.listName,
-            list: [..._add, ..._edit, ..._remove]
+            noteName: _values.noteName,
+            notes: [..._add, ..._edit, ..._remove]
         }
         const response = await fetch("/api/lists", {
             method: !!shareLink ? "PATCH" : "POST",
@@ -159,14 +159,14 @@ export default function ThankYouTableContainer() {
         const data: ThankYouList = await response.json();
         if (!shareLink || shareLink !== data.shareLink) {
             console.log('navigating')
-            saveListToLocalStorage(data.shareLink)
+            saveNotesToLocalStorage(data.shareLink)
             await router.push(`/lists/${data.shareLink}`);
         }
         toast.success('List Saved');
         setSaved(true);
-        console.log('data', data.list)
+        console.log('data', data.notes)
         console.log('selected Row', selectedRow)
-        const _savedList = (data.list || []).map(_row => {
+        const _savedList = data.notes.map(_row => {
             if (_row.id === selectedRow.row.id) {
                 return selectedRow.row
             }
@@ -175,8 +175,8 @@ export default function ThankYouTableContainer() {
         console.log('_savedList', _savedList)
         setSavedList(_savedList);
         setInitialValues({
-            listName: data.listName,
-            notes: [...data.list, createEmptyThankYouRow(), createEmptyThankYouRow()]
+            noteName: data.noteName,
+            notes: [...data.notes, createEmptyThankYouRow(), createEmptyThankYouRow()]
         });
     }
 
@@ -189,11 +189,11 @@ export default function ThankYouTableContainer() {
     }
 
     const createNew = async () => {
-        await removeListFromLocalStorage();
+        await removeNotesFromLocalStorage();
         setShareLink('');
         setSavedList([])
         setInitialValues({
-            listName: 'New List',
+            noteName: 'New List',
             notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
         })
         await router.push("/lists");
@@ -211,6 +211,10 @@ export default function ThankYouTableContainer() {
     }
 
     const onBlurSave = () => {
+        //Don't save until they save
+        if (savedList.length === 0) {
+            return;
+        }
         const formikFiltered = formikRef.current.values.notes.filter(el => !!el.name || !!el.gift || !!el.comment)
 
         if (!hasFormChanged(formikFiltered, savedList)) {
@@ -228,13 +232,13 @@ export default function ThankYouTableContainer() {
 
     return (
         <div className={styles.container}>
-            <Formik key="notes" enableReinitialize={true}
+            <Formik key="list" enableReinitialize={true}
                     initialValues={initialValues}
                     onSubmit={save}
                     innerRef={formikRef}>
                 <Form>
                     <div className={styles.tableHeader}>
-                        <Field name="listName" id="step-6" placeholder="Tracey & Andrew Baby Shower"/>
+                        <Field name="noteName" id="step-6" placeholder="Tracey & Andrew Baby Shower"/>
                         <button className={buttons.basicButton} type="submit" id="step-5">
                             {savedList.length === 0 ?
                                 <><FontAwesomeIcon icon={faFloppyDisk}/> Save</> : !saved ?

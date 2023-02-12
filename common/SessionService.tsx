@@ -1,13 +1,13 @@
-export const getSavedListFromLocalStorage = () => {
-    return localStorage.getItem('thankYouList') || ''
+export const getSavedNotesFromLocalStorage = () => {
+    return localStorage.getItem('thankYouNotes') || ''
 }
 
-export const saveListToLocalStorage = (shareLink: string) => {
-    return localStorage.setItem('thankYouList', shareLink);
+export const saveNotesToLocalStorage = (shareLink: string) => {
+    return localStorage.setItem('thankYouNotes', shareLink);
 }
 
-export const removeListFromLocalStorage = () => {
-    return localStorage.removeItem('thankYouList');
+export const removeNotesFromLocalStorage = () => {
+    return localStorage.removeItem('thankYouNotes');
 }
 
 export const getTutorialPlayed = (): boolean => {

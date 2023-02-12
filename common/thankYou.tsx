@@ -7,35 +7,35 @@ export type ThankYouRow = {
 }
 
 export type ThankYouRowDto = {
-    id: string,
+    id?: string,
     name: string,
     gift: string,
     comment: string,
     thankYouWritten: boolean,
-    action: string
+    action?: string
 }
 
 export type ThankYouRecord = {
     id: string,
     shareLink: string,
-    listName: string,
-    list: string
+    noteName: string,
+    notes: string
 }
 
 export type ThankYouList = {
     id: string,
     shareLink?: string,
-    listName: string,
-    list: ThankYouRow[]
+    noteName: string,
+    notes: ThankYouRow[]
 }
 
 export type ThankYouRequest = {
     shareLink?: string,
-    listName: string,
-    list: ThankYouRowDto[]
+    noteName: string,
+    notes: ThankYouRowDto[]
 }
 
 export type ThankYouTable = {
     notes: ThankYouRow[],
-    listName: string
+    noteName: string
 }
