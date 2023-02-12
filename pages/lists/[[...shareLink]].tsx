@@ -35,8 +35,13 @@ export default function ThankYouTableContainer() {
         listName: 'Thank You List #001',
         notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
     });
+    const [selectedRow, setSelectedRow] = useState({
+        index: null,
+        row: createEmptyThankYouRow()
+    })
     const [savedList, setSavedList] = useState<ThankYouRow[]>([]);
     const { setIsOpen, setCurrentStep } = useTour()
+
 
     useEffect(() => {
         if (!getTutorialPlayed()) {
@@ -159,7 +164,16 @@ export default function ThankYouTableContainer() {
         }
         toast.success('List Saved');
         setSaved(true);
-        setSavedList(data.list);
+        console.log('data', data.list)
+        console.log('selected Row', selectedRow)
+        const _savedList = (data.list || []).map(_row => {
+            if (_row.id === selectedRow.row.id) {
+                return selectedRow.row
+            }
+            return _row;
+        })
+        console.log('_savedList', _savedList)
+        setSavedList(_savedList);
         setInitialValues({
             listName: data.listName,
             notes: [...data.list, createEmptyThankYouRow(), createEmptyThankYouRow()]
@@ -205,6 +219,13 @@ export default function ThankYouTableContainer() {
         save(formikRef.current.values).then();
     }
 
+    const handleFocus = (index, row) => {
+        setSelectedRow({
+            index: index,
+            row: row
+        })
+    }
+
     return (
         <div className={styles.container}>
             <Formik key="notes" enableReinitialize={true}
@@ -230,7 +251,7 @@ export default function ThankYouTableContainer() {
                         }}><FontAwesomeIcon icon={faCircleQuestion}/></button>
                     </div>
                     <div id="step-2">
-                        <ThankYouTableEl formChanged={formChanged} handleBlur={onBlurSave}/>
+                        <ThankYouTableEl formChanged={formChanged} handleBlur={onBlurSave} handleFocus={handleFocus}/>
                     </div>
                 </Form>
             </Formik>
