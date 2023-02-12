@@ -212,7 +212,7 @@ export default function ThankYouTableContainer() {
 
     const onBlurSave = () => {
         //Don't save until they save
-        if (savedList.length === 0) {
+        if (savedList?.length === 0) {
             return;
         }
         const formikFiltered = formikRef.current.values.notes.filter(el => !!el.name || !!el.gift || !!el.comment)
@@ -240,7 +240,7 @@ export default function ThankYouTableContainer() {
                     <div className={styles.tableHeader}>
                         <Field name="noteName" id="step-6" placeholder="Tracey & Andrew Baby Shower"/>
                         <button className={buttons.basicButton} type="submit" id="step-5">
-                            {savedList.length === 0 ?
+                            {savedList?.length === 0 ?
                                 <><FontAwesomeIcon icon={faFloppyDisk}/> Save</> : !saved ?
                                 <><FontAwesomeIcon icon={faArrowsRotate}/> Saving ...</> :
                                 <><FontAwesomeIcon icon={faCheckCircle}/> Saved</>
