@@ -165,9 +165,9 @@ export default function ThankYouTableContainer() {
         console.log('selected Row', selectedRow)
         const _savedList = data.notes.map(_row => {
             if (_row.id === selectedRow) {
-                //
-                // return selectedRow
-                return formikRef.current.values.notes.filter(note => note.id === selectedRow)[0];
+                let filterElement = formikRef.current.values.notes.filter(note => note.id === selectedRow)[0];
+                console.log('found row', filterElement)
+                return filterElement;
             }
             return _row;
         })
