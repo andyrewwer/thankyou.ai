@@ -141,6 +141,14 @@ export default function ThankYouTableContainer() {
                 action: "DELETE"
             }));
 
+        let ignoreSelectedRow = false;
+        _remove.forEach((item: ThankYouRow) => {
+            if (item.id === selectedRow) {
+                setSelectedRow(null);
+                ignoreSelectedRow = true;
+            }
+        })
+
         const body: ThankYouRequest = {
             shareLink: shareLink,
             noteName: _values.noteName,
@@ -164,7 +172,7 @@ export default function ThankYouTableContainer() {
         console.log('data', data.notes)
         console.log('selected Row', selectedRow)
         const _savedList = data.notes.map(_row => {
-            if (_row.id === selectedRow) {
+            if (_row.id === selectedRow && !ignoreSelectedRow) {
                 let filterElement = formikRef.current.values.notes.filter(note => note.id === selectedRow)[0];
                 console.log('found row', filterElement)
                 return filterElement;
