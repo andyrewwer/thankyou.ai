@@ -33,7 +33,7 @@ export const createEmptyThankYouRow = (): ThankYouRow => {
 };
 
 export default function ThankYouTableEl(props) {
-    const {formChanged, handleBlur, handleFocus} = props;
+    const {formChanged, handleBlur} = props;
 
     //For accessibility
     Modal.setAppElement('#__next');
@@ -106,7 +106,6 @@ export default function ThankYouTableEl(props) {
                                                 <Field type="hidden" name={`notes.${index}.id`}/>
                                                 <Field type="text" name={`notes.${index}.name`}
                                                        placeholder="John Doe"
-                                                       onFocus={() => handleFocus(values.notes[index])}
                                                        onBlur={() => {
                                                            handleBlur();
                                                            addOrRemoveRowsOnBlur(arrayHelpers, index)
@@ -115,7 +114,6 @@ export default function ThankYouTableEl(props) {
                                             <td>
                                                 <Field type="text" name={`notes.${index}.gift`}
                                                        placeholder="Brief Description of the Gift"
-                                                       onFocus={() => handleFocus(values.notes[index])}
                                                        onBlur={() => {
                                                            handleBlur();
                                                            addOrRemoveRowsOnBlur(arrayHelpers, index)
@@ -123,7 +121,6 @@ export default function ThankYouTableEl(props) {
                                             </td>
                                             <td>
                                                 <Field type="text" name={`notes.${index}.comment`}
-                                                       onFocus={() => handleFocus(values.notes[index])}
                                                        onBlur={() => handleBlur()}
                                                        placeholder="Any comments"/>
                                             </td>

@@ -35,7 +35,7 @@ export default function ThankYouTableContainer() {
         noteName: 'Thank You List #001',
         notes: [createEmptyThankYouRow(), createEmptyThankYouRow(), createEmptyThankYouRow()]
     });
-    const [selectedRow, setSelectedRow] = useState<string>(null)
+    const [selectedRow, setSelectedRow] = useState<ThankYouRow>(null)
     const [savedList, setSavedList] = useState<ThankYouRow[]>([]);
     const { setIsOpen, setCurrentStep } = useTour()
 
@@ -143,7 +143,7 @@ export default function ThankYouTableContainer() {
 
         let ignoreSelectedRow = false;
         _remove.forEach((item: ThankYouRow) => {
-            if (item.id === selectedRow) {
+            if (item.id === selectedRow.id) {
                 setSelectedRow(null);
                 ignoreSelectedRow = true;
             }
@@ -172,10 +172,8 @@ export default function ThankYouTableContainer() {
         console.log('data', data.notes)
         console.log('selected Row', selectedRow)
         const _savedList = data.notes.map(_row => {
-            if (_row.id === selectedRow && !ignoreSelectedRow) {
-                let filterElement = formikRef.current.values.notes.filter(note => note.id === selectedRow)[0];
-                console.log('found row', filterElement)
-                return filterElement;
+            if (_row.id === selectedRow.id && !ignoreSelectedRow) {
+                return selectedRow;
             }
             return _row;
         })
@@ -207,13 +205,14 @@ export default function ThankYouTableContainer() {
         toast.success("Created new List. Make sure to press 'save'.")
     }
 
-    const formChanged = () => {
+    const formChanged = (row) => {
         const formikFiltered = formikRef.current.values.notes.filter(el => !!el.name || !!el.gift || !!el.comment)
 
         if (!hasFormChanged(formikFiltered, savedList)) {
             return;
         }
         setSaved(false);
+        setSelectedRow(row)
         console.log('form changed! ')
     }
 
@@ -228,10 +227,6 @@ export default function ThankYouTableContainer() {
             return;
         }
         save(formikRef.current.values).then();
-    }
-
-    const handleFocus = (row) => {
-        setSelectedRow(row.id)
     }
 
     return (
@@ -259,7 +254,7 @@ export default function ThankYouTableContainer() {
                         }}><FontAwesomeIcon icon={faCircleQuestion}/></button>
                     </div>
                     <div id="step-2">
-                        <ThankYouTableEl formChanged={formChanged} handleBlur={onBlurSave} handleFocus={handleFocus}/>
+                        <ThankYouTableEl formChanged={formChanged} handleBlur={onBlurSave}/>
                     </div>
                 </Form>
             </Formik>
