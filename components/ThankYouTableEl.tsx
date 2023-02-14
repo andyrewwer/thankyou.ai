@@ -39,13 +39,15 @@ export default function ThankYouTableEl(props) {
     Modal.setAppElement('#__next');
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [sortAscending, setSortAscending] = useState(null);
-
+    const [activeIndex, setActiveIndex] = useState(-1)
     const [modalState, setModalState] = useState({msg: '', index: 0});
     // @ts-ignore
     const {values, setValues, setFieldValue}: {values: ThankYouRequest, setValues: (values: ThankYouRequest) => void, setFieldValue: (field: string, value: any) => void} = useFormikContext();
 
     useEffect(() => {
-        formChanged();
+        if (activeIndex >= 0) {
+            formChanged(values.notes[activeIndex]);
+        }
     }, [values]);
 
     const generate = (note: ThankYouRowDto, index) => {
@@ -75,6 +77,15 @@ export default function ThankYouTableEl(props) {
         setSortAscending(b => !b);
     }
 
+    const _handleBlur = (arrayHelpers, index) => {
+        handleBlur();
+        setActiveIndex(-1);
+        addOrRemoveRowsOnBlur(arrayHelpers, index)
+    }
+
+    const _handleFocus = (index) => {
+        setActiveIndex(index)
+    }
     return <>
         <table className={styles.table}>
             <thead>
@@ -106,23 +117,21 @@ export default function ThankYouTableEl(props) {
                                                 <Field type="hidden" name={`notes.${index}.id`}/>
                                                 <Field type="text" name={`notes.${index}.name`}
                                                        placeholder="John Doe"
-                                                       onBlur={() => {
-                                                           handleBlur();
-                                                           addOrRemoveRowsOnBlur(arrayHelpers, index)
-                                                       }}/>
+                                                       onFocus={() => _handleFocus(index)}
+                                                       onBlur={() => _handleBlur(arrayHelpers, index)}/>
                                             </td>
                                             <td>
                                                 <Field type="text" name={`notes.${index}.gift`}
                                                        placeholder="Brief Description of the Gift"
-                                                       onBlur={() => {
-                                                           handleBlur();
-                                                           addOrRemoveRowsOnBlur(arrayHelpers, index)
-                                                       }}/>
+                                                       onFocus={() => _handleFocus(index)}
+                                                       onBlur={() => _handleBlur(arrayHelpers, index)}/>
+
                                             </td>
                                             <td>
                                                 <Field type="text" name={`notes.${index}.comment`}
-                                                       onBlur={() => handleBlur()}
-                                                       placeholder="Any comments"/>
+                                                       onFocus={() => _handleFocus(index)}
+                                                       onBlur={() => _handleBlur(arrayHelpers, index)}
+                                                placeholder="Any comments"/>
                                             </td>
                                             <td>
                                                 <div style={{display: "flex", gap: "0.5rem"}}>
